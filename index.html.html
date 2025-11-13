@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyInstants Soundboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #f5f5f5;
+        color: #2c2c2c;
+        font-family: "Arial", sans-serif;
+        line-height: 1.6;
+        padding: 1rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #6b4ce6;
+      }
+      .ad {
+        background-color: #e8e8e8;
+        border: 1px solid #d0d0d0;
+        border-radius: 8px;
+        height: 90px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 0.9rem;
+      }
+      .search {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      #searchInput {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.75rem;
+        background-color: #ffffff;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        color: #2c2c2c;
+        font-size: 1rem;
+      }
+      #searchInput::placeholder {
+        color: #999;
+      }
+      #searchBtn {
+        padding: 0.75rem 1.5rem;
+        background-color: #6b4ce6;
+        border: none;
+        border-radius: 4px;
+        color: #ffffff;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #searchBtn:hover {
+        background-color: #5a3dc4;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .sound-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        aspect-ratio: 1;
+        max-width: 250px;
+        background-color: var(--button-bg);
+        border: 8px solid var(--button-border);
+        color: white;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 3rem;
+      }
+
+      .button:hover {
+        border: 8px solid var(--button-border-hover);
+        background-color: var(--button-bg-hover);
+      }
+
+      .button:active {
+        border: 5px solid var(--button-border);
+      }
+
+      .button:hover .play-icon {
+        animation: jello-vertical 0.9s both;
+        transform-origin: center;
+      }
+
+      @keyframes jello-vertical {
+        0% {
+          transform: scale3d(1, 1, 1);
+        }
+        30% {
+          transform: scale3d(0.75, 1.25, 1);
+        }
+        40% {
+          transform: scale3d(1.25, 0.75, 1);
+        }
+        50% {
+          transform: scale3d(0.85, 1.15, 1);
+        }
+        65% {
+          transform: scale3d(1.05, 0.95, 1);
+        }
+        75% {
+          transform: scale3d(0.95, 1.05, 1);
+        }
+        100% {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      .sound-info {
+        margin-top: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 250px;
+      }
+
+      .sound-name {
+        color: #2c2c2c;
+        font-size: 0.9rem;
+        text-align: center;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .Btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background-color: rgb(214, 178, 255);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        transition-duration: 0.3s;
+        flex-shrink: 0;
+      }
+
+      .svgIcon {
+        fill: rgb(0, 0, 0);
+      }
+
+      .icon2 {
+        width: 14px;
+        height: 4px;
+        border-bottom: 2px solid rgb(0, 0, 0);
+        border-left: 2px solid rgb(0, 0, 0);
+        border-right: 2px solid rgb(182, 143, 255);
+      }
+
+      .tooltip {
+        position: absolute;
+        right: -105px;
+        opacity: 0;
+        background-color: rgb(12, 12, 12);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition-duration: 0.2s;
+        pointer-events: none;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+
+      .tooltip::before {
+        position: absolute;
+        content: "";
+        width: 10px;
+        height: 10px;
+        background-color: rgb(12, 12, 12);
+        background-size: 1000%;
+        background-position: center;
+        transform: rotate(45deg);
+        left: -5%;
+        transition-duration: 0.3s;
+      }
+
+      .Btn:hover .tooltip {
+        opacity: 1;
+        transition-duration: 0.3s;
+      }
+
+      .Btn:hover {
+        background-color: rgb(150, 94, 255);
+        transition-duration: 0.3s;
+      }
+
+      .Btn:hover .icon2 {
+        border-bottom: 2px solid rgb(235, 235, 235);
+        border-left: 2px solid rgb(235, 235, 235);
+        border-right: 2px solid rgb(235, 235, 235);
+      }
+
+      .Btn:hover .svgIcon {
+        fill: rgb(255, 255, 255);
+        animation: slide-in-top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
+      @keyframes slide-in-top {
+        0% {
+          transform: translateY(-10px);
+          opacity: 0;
+        }
+
+        100% {
+          transform: translateY(0px);
+          opacity: 1;
+        }
+      }
+      #loading {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        display: none;
+      }
+      .pagination {
+        text-align: center;
+        margin: 1rem 0;
+      }
+      .pagination button {
+        padding: 0.5rem 1rem;
+        background-color: #6b4ce6;
+        border: none;
+        border-radius: 4px;
+        color: #ffffff;
+        cursor: pointer;
+        font-weight: bold;
+        margin: 0 0.5rem;
+      }
+      .pagination button:hover:not(:disabled) {
+        background-color: #5a3dc4;
+      }
+      .pagination button:disabled {
+        background-color: #d0d0d0;
+        color: #999;
+        cursor: not-allowed;
+      }
+      #pageInfo {
+        margin: 0 1rem;
+        font-size: 1rem;
+        color: #2c2c2c;
+      }
+      @media (max-width: 600px) {
+        .search {
+          flex-direction: column;
+        }
+        #searchInput {
+          min-width: auto;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Soundboard</h1>
+      <div class="ad">Google AdSense Placeholder - Top</div>
+
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Enter sound name" />
+        <button id="searchBtn">Search & Play</button>
+      </div>
+
+      <div id="soundsGrid" class="grid"></div>
+
+      <div id="pagination" class="pagination" style="display: none">
+        <button id="prevBtn" disabled>Prev</button>
+        <span id="pageInfo">Page 1 of 50</span>
+        <button id="nextBtn">Next</button>
+      </div>
+
+      <div class="ad">Google AdSense Placeholder - Middle</div>
+
+      <div id="loading">Loading trending sounds...</div>
+
+      <div class="ad">Google AdSense Placeholder - Bottom</div>
+    </div>
+
+    <script>
+      let currentAudio = null;
+      let currentPage = 1;
+      const maxPage = 50;
+
+      // Array of vibrant Gen Z color combinations for the buttons
+      const colorSchemes = [
+        {
+          bg: "#006aff",
+          border: "#c0dfff",
+          borderHover: "#b1d8ff",
+          bgHover: "#1b7aff",
+        }, // Electric Blue
+        {
+          bg: "#ff006e",
+          border: "#ffc0d9",
+          borderHover: "#ffb1d1",
+          bgHover: "#ff1b7e",
+        }, // Hot Pink
+        {
+          bg: "#8338ec",
+          border: "#ddc0ff",
+          borderHover: "#d4b1ff",
+          bgHover: "#9b4fff",
+        }, // Purple
+        {
+          bg: "#00f5d4",
+          border: "#c0fff5",
+          borderHover: "#b1ffef",
+          bgHover: "#1bffe0",
+        }, // Cyan
+        {
+          bg: "#ffbe0b",
+          border: "#fff0c0",
+          borderHover: "#ffecb1",
+          bgHover: "#ffc91b",
+        }, // Yellow
+        {
+          bg: "#fb5607",
+          border: "#ffd5c0",
+          borderHover: "#ffcbb1",
+          bgHover: "#ff671b",
+        }, // Orange
+        {
+          bg: "#3a86ff",
+          border: "#c9ddff",
+          borderHover: "#bfd7ff",
+          bgHover: "#4e94ff",
+        }, // Sky Blue
+        {
+          bg: "#ff006e",
+          border: "#ffc0d9",
+          borderHover: "#ffb1d1",
+          bgHover: "#ff1b7e",
+        }, // Magenta
+        {
+          bg: "#06ffa5",
+          border: "#c0ffe4",
+          borderHover: "#b1ffdd",
+          bgHover: "#1bffaf",
+        }, // Mint
+        {
+          bg: "#ff4d6d",
+          border: "#ffd0d9",
+          borderHover: "#ffc5d0",
+          bgHover: "#ff5e7d",
+        }, // Coral
+      ];
+
+      function getRandomColor() {
+        return colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+      }
+
+      function playSound(mp3Url) {
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio = null;
+        }
+        currentAudio = new Audio(mp3Url);
+        currentAudio.play().catch((e) => console.error("Playback failed:", e));
+      }
+
+      function displaySounds(sounds) {
+        const grid = document.getElementById("soundsGrid");
+        grid.innerHTML = "";
+        sounds.forEach((sound, index) => {
+          // Cycle through colors sequentially
+          const colors = colorSchemes[index % colorSchemes.length];
+
+          // Create container for button and info
+          const soundItem = document.createElement("div");
+          soundItem.className = "sound-item";
+
+          // Create the play button
+          const btn = document.createElement("button");
+          btn.className = "button";
+          btn.role = "button";
+          btn.innerHTML = `<span class="play-icon">▶</span>`;
+
+          // Apply colors sequentially using CSS variables
+          btn.style.setProperty("--button-bg", colors.bg);
+          btn.style.setProperty("--button-border", colors.border);
+          btn.style.setProperty("--button-border-hover", colors.borderHover);
+          btn.style.setProperty("--button-bg-hover", colors.bgHover);
+
+          btn.onclick = () => playSound(sound.mp3);
+
+          // Create info section with name and download button
+          const infoDiv = document.createElement("div");
+          infoDiv.className = "sound-info";
+
+          const nameSpan = document.createElement("span");
+          nameSpan.className = "sound-name";
+          nameSpan.textContent = sound.title;
+          nameSpan.title = sound.title; // Show full name on hover
+
+          const downloadBtn = document.createElement("button");
+          downloadBtn.className = "Btn";
+          downloadBtn.innerHTML = `
+            <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
+            </svg>
+            <span class="icon2"></span>
+            <span class="tooltip">Download</span>
+          `;
+          downloadBtn.onclick = async (e) => {
+            e.stopPropagation();
+            try {
+              // Use CORS proxy to fetch the audio file
+              const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
+                sound.mp3
+              )}`;
+              const response = await fetch(proxyUrl);
+              const blob = await response.blob();
+
+              // Create a download link
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = sound.title + ".mp3";
+              document.body.appendChild(link);
+              link.click();
+
+              // Cleanup
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+            } catch (error) {
+              console.error("Download failed:", error);
+              alert("Failed to download the sound. Please try again.");
+            }
+          };
+
+          infoDiv.appendChild(nameSpan);
+          infoDiv.appendChild(downloadBtn);
+
+          soundItem.appendChild(btn);
+          soundItem.appendChild(infoDiv);
+          grid.appendChild(soundItem);
+        });
+      }
+
+      function updatePagination() {
+        document.getElementById(
+          "pageInfo"
+        ).textContent = `Page ${currentPage} of ${maxPage}`;
+        document.getElementById("prevBtn").disabled = currentPage === 1;
+        document.getElementById("nextBtn").disabled = currentPage === maxPage;
+      }
+
+      async function fetchSounds(endpoint, params) {
+        let targetUrl = `https://instants-api.vercel.app${endpoint}`;
+        const url = new URL(targetUrl);
+        Object.entries(params || {}).forEach(([key, value]) =>
+          url.searchParams.set(key, value)
+        );
+        targetUrl = url.toString();
+        const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
+          targetUrl
+        )}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+          throw new Error("Failed to fetch sounds");
+        }
+        const data = await response.json();
+        return data.data || [];
+      }
+
+      async function loadTrending(page) {
+        if (page < 1 || page > maxPage) return;
+        currentPage = page;
+        document.getElementById("loading").style.display = "block";
+        document.getElementById(
+          "loading"
+        ).textContent = `Loading page ${page}...`;
+        try {
+          const sounds = await fetchSounds("/api/trending", {
+            q: "id",
+            page,
+            limit: 50,
+          });
+          displaySounds(sounds);
+          updatePagination();
+          document.getElementById("pagination").style.display = "block";
+        } catch (error) {
+          console.error("Error loading trending:", error);
+          document.getElementById("loading").textContent =
+            "Failed to load trending sounds.";
+        } finally {
+          document.getElementById("loading").style.display = "none";
+        }
+      }
+
+      async function performSearch(term) {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("loading").textContent = "Searching...";
+        try {
+          const sounds = await fetchSounds("/search", { q: term, limit: 20 });
+          displaySounds(sounds);
+          document.getElementById("pagination").style.display = "none";
+        } catch (error) {
+          console.error("Error searching:", error);
+          document.getElementById("loading").textContent = "No sounds found.";
+        } finally {
+          document.getElementById("loading").style.display = "none";
+        }
+      }
+
+      document.getElementById("searchBtn").onclick = async () => {
+        const term = document.getElementById("searchInput").value.trim();
+        if (!term) {
+          loadTrending(1);
+        } else {
+          performSearch(term);
+        }
+      };
+
+      document.getElementById("searchInput").onkeypress = (e) => {
+        if (e.key === "Enter") {
+          document.getElementById("searchBtn").click();
+        }
+      };
+
+      document.getElementById("prevBtn").onclick = () =>
+        loadTrending(currentPage - 1);
+      document.getElementById("nextBtn").onclick = () =>
+        loadTrending(currentPage + 1);
+
+      window.onload = () => loadTrending(1);
+    </script>
+  </body>
+</html>
