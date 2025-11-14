@@ -602,10 +602,15 @@
       function createAdElement() {
         const adContainer = document.createElement("div");
         adContainer.className = "inline-ad ad";
+        adContainer.style.minHeight = "100px";
+        adContainer.style.width = "100%";
+        adContainer.style.minWidth = "300px"; // Ensure minimum width
 
         const ins = document.createElement("ins");
         ins.className = "adsbygoogle";
         ins.style.display = "block";
+        ins.style.minHeight = "90px";
+        ins.style.width = "100%"; // Ensure width is set
         ins.setAttribute("data-ad-client", "ca-pub-3237855763291333");
         ins.setAttribute("data-ad-slot", "6855667512");
         ins.setAttribute("data-ad-format", "auto");
@@ -630,12 +635,18 @@
             const adElement = createAdElement();
             grid.appendChild(adElement);
 
-            // Initialize the ad
-            try {
-              (adsbygoogle = window.adsbygoogle || []).push({});
-            } catch (e) {
-              console.log("Ad error:", e);
-            }
+            // Initialize the ad after a brief delay to ensure DOM is ready
+            setTimeout(() => {
+              try {
+                const ins = adElement.querySelector(".adsbygoogle");
+                if (ins && !ins.hasAttribute("data-ad-initialized")) {
+                  (adsbygoogle = window.adsbygoogle || []).push({});
+                  ins.setAttribute("data-ad-initialized", "true");
+                }
+              } catch (e) {
+                console.log("Inline ad error:", e);
+              }
+            }, 100);
           }
 
           // Cycle through colors sequentially
@@ -914,16 +925,25 @@
         }
       }
 
-      // Initialize ads on page load
-      window.onload = () => {
-        // Initialize top and bottom ads
-        try {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-          console.log("Initial ad error:", e);
-        }
+      // Initialize ads after content loads
+      function initializeAds() {
+        // Use setTimeout to ensure DOM is fully rendered with dimensions
+        setTimeout(() => {
+          try {
+            const adElements = document.querySelectorAll(".adsbygoogle");
+            adElements.forEach((ad) => {
+              if (!ad.hasAttribute("data-ad-initialized")) {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                ad.setAttribute("data-ad-initialized", "true");
+              }
+            });
+          } catch (e) {
+            console.log("Ad initialization error:", e);
+          }
+        }, 100);
+      }
 
+      window.onload = () => {
         const searchParam = getUrlParameter("search");
 
         if (searchParam) {
@@ -936,6 +956,9 @@
           preloadPages([2, 3]);
           loadTrending(1);
         }
+
+        // Initialize ads after a short delay to ensure DOM is ready
+        initializeAds();
       };
 
       window.onpopstate = function (event) {
