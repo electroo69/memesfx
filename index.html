@@ -75,11 +75,45 @@
         color: #2c2c2c;
         font-family: "Arial", sans-serif;
         line-height: 1.6;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+      }
+      .page-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        max-width: 1800px;
         padding: 1rem;
       }
       .container {
         max-width: 1200px;
-        margin: 0 auto;
+        flex: 1;
+      }
+      .left-sidebar-ad,
+      .right-sidebar-ad {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        width: 160px;
+        flex-shrink: 0;
+      }
+      .side-ad {
+        background-color: #e8e8e8;
+        border: 1px solid #d0d0d0;
+        border-radius: 8px;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 0.85rem;
+        padding: 0.5rem;
+        text-align: center;
+      }
+      .main-content-wrapper {
+        min-width: 0;
       }
       h1 {
         text-align: center;
@@ -409,6 +443,12 @@
       .main-content {
         min-width: 0;
       }
+      @media (max-width: 1400px) {
+        .left-sidebar-ad,
+        .right-sidebar-ad {
+          display: none;
+        }
+      }
       @media (max-width: 900px) {
         .content-wrapper {
           grid-template-columns: 1fr;
@@ -464,42 +504,26 @@
     </script>
   </head>
   <body>
-    <div class="container">
-      <h1>Memesfx Soundboard</h1>
-
-      <!-- Top Ad -->
-      <div class="ad">
-        <ins
-          class="adsbygoogle"
-          style="display: block"
-          data-ad-client="ca-pub-3237855763291333"
-          data-ad-slot="6855667512"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
-
-      <main class="main-content">
-        <div class="search">
-          <input type="text" id="searchInput" placeholder="Enter sound name" />
-          <button id="searchBtn">Search & Play</button>
+    <div class="page-wrapper">
+      <!-- Left Sidebar Ad -->
+      <aside class="left-sidebar-ad">
+        <div class="side-ad">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3237855763291333"
+            data-ad-slot="6855667512"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
         </div>
+      </aside>
 
-        <h2 id="sectionTitle" style="color: #6b4ce6; margin-bottom: 1rem">
-          Trending Sounds
-        </h2>
+      <!-- Main Content -->
+      <div class="container">
+        <h1>Memesfx Soundboard</h1>
 
-        <div id="soundsGrid" class="grid"></div>
-
-        <div id="pagination" class="pagination" style="display: none">
-          <button id="prevBtn" disabled>Prev</button>
-          <span id="pageInfo">Page 1 of 50</span>
-          <button id="nextBtn">Next</button>
-        </div>
-
-        <div id="loading">Loading trending sounds...</div>
-
-        <!-- Bottom Ad -->
+        <!-- Top Ad -->
         <div class="ad">
           <ins
             class="adsbygoogle"
@@ -510,7 +534,58 @@
             data-full-width-responsive="true"
           ></ins>
         </div>
-      </main>
+
+        <main class="main-content">
+          <div class="search">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Enter sound name"
+            />
+            <button id="searchBtn">Search & Play</button>
+          </div>
+
+          <h2 id="sectionTitle" style="color: #6b4ce6; margin-bottom: 1rem">
+            Trending Sounds
+          </h2>
+
+          <div id="soundsGrid" class="grid"></div>
+
+          <div id="pagination" class="pagination" style="display: none">
+            <button id="prevBtn" disabled>Prev</button>
+            <span id="pageInfo">Page 1 of 50</span>
+            <button id="nextBtn">Next</button>
+          </div>
+
+          <div id="loading">Loading trending sounds...</div>
+
+          <!-- Bottom Ad -->
+          <div class="ad">
+            <ins
+              class="adsbygoogle"
+              style="display: block"
+              data-ad-client="ca-pub-3237855763291333"
+              data-ad-slot="6855667512"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+        </main>
+      </div>
+
+      <!-- Right Sidebar Ad -->
+      <aside class="right-sidebar-ad">
+        <div class="side-ad">
+          <ins
+            class="adsbygoogle"
+            style="display: block"
+            data-ad-client="ca-pub-3237855763291333"
+            data-ad-slot="6855667512"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+        </div>
+      </aside>
     </div>
 
     <script>
