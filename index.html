@@ -3,9 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-adsense-account" content="ca-pub-3237855763291333" />
-
-    <!-- Primary Meta Tags -->
     <title>Memesfx | The largest instant sound buttons website</title>
     <meta
       name="title"
@@ -22,7 +19,6 @@
     <meta name="author" content="Memesfx" />
     <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://memesfx.gyatbox.space/" />
     <meta
@@ -38,7 +34,6 @@
       content="https://memesfx.gyatbox.space/preview-image.jpg"
     />
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://memesfx.gyatbox.space/" />
     <meta
@@ -54,15 +49,7 @@
       content="https://memesfx.gyatbox.space/preview-image.jpg"
     />
 
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://memesfx.gyatbox.space/" />
-
-    <!-- Google AdSense -->
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3237855763291333"
-      crossorigin="anonymous"
-    ></script>
 
     <style>
       * {
@@ -90,6 +77,8 @@
       .container {
         max-width: 1200px;
         flex: 1;
+        /* Ensure container doesn't overflow horizontally on small screens */
+        overflow-x: hidden; 
       }
       .left-sidebar-ad,
       .right-sidebar-ad {
@@ -111,6 +100,7 @@
         font-size: 0.85rem;
         padding: 0.5rem;
         text-align: center;
+        overflow: hidden; /* Contains the ad script */
       }
       .main-content-wrapper {
         min-width: 0;
@@ -131,6 +121,17 @@
         justify-content: center;
         color: #666;
         font-size: 0.9rem;
+        /* Make ads responsive container */
+        overflow: hidden;
+        position: relative;
+      }
+      /* Special styling for Adsterra 728px banners on mobile */
+      .adsterra-wrapper {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          /* If screen is smaller than ad, allow scroll within the ad box only */
+          overflow-x: auto; 
       }
       .inline-ad {
         grid-column: 1 / -1;
@@ -471,7 +472,6 @@
       }
     </style>
 
-    <!-- Structured Data / Schema.org -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -504,46 +504,37 @@
     </script>
   </head>
   <body>
-	  <script type="text/javascript">
-	atOptions = {
-		'key' : 'c50bb328670da58a01a9ba5ef5827975',
-		'format' : 'iframe',
-		'height' : 90,
-		'width' : 728,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.highperformanceformat.com/c50bb328670da58a01a9ba5ef5827975/invoke.js"></script>
     <div class="page-wrapper">
-      <!-- Left Sidebar Ad -->
       <aside class="left-sidebar-ad">
         <div class="side-ad">
-          <ins
-            class="adsbygoogle"
-            style="display: block"
-            data-ad-client="ca-pub-3237855763291333"
-            data-ad-slot="6855667512"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
-        </div>
+          <script type="text/javascript">
+                atOptions = {
+                    'key' : 'a987403d86d10ea7dae571a081e651c4',
+                    'format' : 'iframe',
+                    'height' : 600,
+                    'width' : 160,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a987403d86d10ea7dae571a081e651c4/invoke.js"></script>
+          </div>
       </aside>
 
-      <!-- Main Content -->
       <div class="container">
         <h1>Memesfx Soundboard</h1>
 
-        <!-- Top Ad -->
-        <div class="ad">
-          <ins
-            class="adsbygoogle"
-            style="display: block"
-            data-ad-client="ca-pub-3237855763291333"
-            data-ad-slot="6855667512"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
-        </div>
+        <div class="ad adsterra-wrapper">
+           <script type="text/javascript">
+                atOptions = {
+                    'key' : 'c50bb328670da58a01a9ba5ef5827975',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/c50bb328670da58a01a9ba5ef5827975/invoke.js"></script>
+           </div>
 
         <main class="main-content">
           <div class="search">
@@ -569,32 +560,34 @@
 
           <div id="loading">Loading trending sounds...</div>
 
-          <!-- Bottom Ad -->
-          <div class="ad">
-            <ins
-              class="adsbygoogle"
-              style="display: block"
-              data-ad-client="ca-pub-3237855763291333"
-              data-ad-slot="6855667512"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
+          <div class="ad adsterra-wrapper">
+             <script type="text/javascript">
+                atOptions = {
+                    'key' : 'c50bb328670da58a01a9ba5ef5827975',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/c50bb328670da58a01a9ba5ef5827975/invoke.js"></script>
+            </div>
         </main>
       </div>
 
-      <!-- Right Sidebar Ad -->
       <aside class="right-sidebar-ad">
         <div class="side-ad">
-          <ins
-            class="adsbygoogle"
-            style="display: block"
-            data-ad-client="ca-pub-3237855763291333"
-            data-ad-slot="6855667512"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
-        </div>
+          <script type="text/javascript">
+                atOptions = {
+                    'key' : 'a987403d86d10ea7dae571a081e651c4',
+                    'format' : 'iframe',
+                    'height' : 600,
+                    'width' : 160,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a987403d86d10ea7dae571a081e651c4/invoke.js"></script>
+           </div>
       </aside>
     </div>
 
@@ -684,24 +677,53 @@
         currentAudio.play().catch((e) => console.error("Playback failed:", e));
       }
 
+      // Updated Ad Element creation for infinite scroll grid
       function createAdElement() {
         const adContainer = document.createElement("div");
-        adContainer.className = "inline-ad ad";
+        adContainer.className = "inline-ad ad adsterra-wrapper";
         adContainer.style.minHeight = "100px";
         adContainer.style.width = "100%";
-        adContainer.style.minWidth = "300px"; // Ensure minimum width
+        adContainer.style.minWidth = "300px"; 
+        adContainer.style.overflowX = "auto"; 
 
-        const ins = document.createElement("ins");
-        ins.className = "adsbygoogle";
-        ins.style.display = "block";
-        ins.style.minHeight = "90px";
-        ins.style.width = "100%"; // Ensure width is set
-        ins.setAttribute("data-ad-client", "ca-pub-3237855763291333");
-        ins.setAttribute("data-ad-slot", "6855667512");
-        ins.setAttribute("data-ad-format", "auto");
-        ins.setAttribute("data-full-width-responsive", "true");
+        // 1. Create an Iframe to isolate the document.write call
+        // We use the 728x90 key here for grid ads
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '728px'; 
+        iframe.style.height = '90px'; 
+        iframe.style.border = 'none';
+        iframe.style.overflow = 'hidden';
+        iframe.scrolling = "no";
+        
+        adContainer.appendChild(iframe);
 
-        adContainer.appendChild(ins);
+        // 2. Inject the Adsterra script into the iframe after a tiny delay
+        setTimeout(() => {
+            try {
+                const doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write(`
+                    <html>
+                    <body style="margin:0;padding:0;display:flex;justify-content:center;">
+                        <script type="text/javascript">
+                            atOptions = {
+                                'key' : 'c50bb328670da58a01a9ba5ef5827975',
+                                'format' : 'iframe',
+                                'height' : 90,
+                                'width' : 728,
+                                'params' : {}
+                            };
+                        <\/script>
+                        <script type="text/javascript" src="//www.highperformanceformat.com/c50bb328670da58a01a9ba5ef5827975/invoke.js"><\/script>
+                    </body>
+                    </html>
+                `);
+                doc.close();
+            } catch (e) {
+                console.log("Adsterra injection error", e);
+            }
+        }, 50);
+
         return adContainer;
       }
 
@@ -719,19 +741,6 @@
           if (index > 0 && index % itemsBeforeAd === 0) {
             const adElement = createAdElement();
             grid.appendChild(adElement);
-
-            // Initialize the ad after a brief delay to ensure DOM is ready
-            setTimeout(() => {
-              try {
-                const ins = adElement.querySelector(".adsbygoogle");
-                if (ins && !ins.hasAttribute("data-ad-initialized")) {
-                  (adsbygoogle = window.adsbygoogle || []).push({});
-                  ins.setAttribute("data-ad-initialized", "true");
-                }
-              } catch (e) {
-                console.log("Inline ad error:", e);
-              }
-            }, 100);
           }
 
           // Cycle through colors sequentially
@@ -768,7 +777,7 @@
           downloadBtn.className = "Btn";
           downloadBtn.innerHTML = `
             <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
-              <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
+              <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
             </svg>
             <span class="icon2"></span>
             <span class="tooltip">Download</span>
@@ -1015,6 +1024,7 @@
         // Use setTimeout to ensure DOM is fully rendered with dimensions
         setTimeout(() => {
           try {
+             /* // --- ADSENSE LOGIC (COMMENTED OUT) ---
             const adElements = document.querySelectorAll(".adsbygoogle");
             adElements.forEach((ad) => {
               if (!ad.hasAttribute("data-ad-initialized")) {
@@ -1022,6 +1032,7 @@
                 ad.setAttribute("data-ad-initialized", "true");
               }
             });
+            */
           } catch (e) {
             console.log("Ad initialization error:", e);
           }
