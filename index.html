@@ -77,7 +77,6 @@
       .container {
         max-width: 1200px;
         flex: 1;
-        /* Ensure container doesn't overflow horizontally on small screens */
         overflow-x: hidden; 
       }
       .left-sidebar-ad,
@@ -100,7 +99,7 @@
         font-size: 0.85rem;
         padding: 0.5rem;
         text-align: center;
-        overflow: hidden; /* Contains the ad script */
+        overflow: hidden;
       }
       .main-content-wrapper {
         min-width: 0;
@@ -121,16 +120,13 @@
         justify-content: center;
         color: #666;
         font-size: 0.9rem;
-        /* Make ads responsive container */
         overflow: hidden;
         position: relative;
       }
-      /* Special styling for Adsterra 728px banners on mobile */
       .adsterra-wrapper {
           width: 100%;
           display: flex;
           justify-content: center;
-          /* If screen is smaller than ad, allow scroll within the ad box only */
           overflow-x: auto; 
       }
       .inline-ad {
@@ -169,8 +165,11 @@
       #searchBtn:hover {
         background-color: #5a3dc4;
       }
+      
+      /* --- GRID SYSTEM --- */
       .grid {
         display: grid;
+        /* Default Desktop: ~160px items */
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
@@ -179,11 +178,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%; /* Ensure it fits the grid cell */
       }
       .button {
         display: flex;
         align-items: center;
         justify-content: center;
+        /* Desktop Sizes */
         width: 160px;
         height: 160px;
         background-color: var(--button-bg);
@@ -210,27 +211,13 @@
       }
 
       @keyframes jello-vertical {
-        0% {
-          transform: scale3d(1, 1, 1);
-        }
-        30% {
-          transform: scale3d(0.75, 1.25, 1);
-        }
-        40% {
-          transform: scale3d(1.25, 0.75, 1);
-        }
-        50% {
-          transform: scale3d(0.85, 1.15, 1);
-        }
-        65% {
-          transform: scale3d(1.05, 0.95, 1);
-        }
-        75% {
-          transform: scale3d(0.95, 1.05, 1);
-        }
-        100% {
-          transform: scale3d(1, 1, 1);
-        }
+        0% { transform: scale3d(1, 1, 1); }
+        30% { transform: scale3d(0.75, 1.25, 1); }
+        40% { transform: scale3d(1.25, 0.75, 1); }
+        50% { transform: scale3d(0.85, 1.15, 1); }
+        65% { transform: scale3d(1.05, 0.95, 1); }
+        75% { transform: scale3d(0.95, 1.05, 1); }
+        100% { transform: scale3d(1, 1, 1); }
       }
 
       .sound-info {
@@ -333,16 +320,10 @@
       }
 
       @keyframes slide-in-top {
-        0% {
-          transform: translateY(-10px);
-          opacity: 0;
-        }
-
-        100% {
-          transform: translateY(0px);
-          opacity: 1;
-        }
+        0% { transform: translateY(-10px); opacity: 0; }
+        100% { transform: translateY(0px); opacity: 1; }
       }
+      
       #loading {
         text-align: center;
         color: #666;
@@ -376,89 +357,17 @@
         font-size: 1rem;
         color: #2c2c2c;
       }
-      .nav-section {
-        background-color: #ffffff;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-      .nav-section h2 {
-        font-size: 1.3rem;
-        color: #6b4ce6;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid #e8e8e8;
-        padding-bottom: 0.5rem;
-      }
-      .nav-links {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-      .nav-link {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.75rem;
-        background-color: #f9f9f9;
-        border-radius: 6px;
-        text-decoration: none;
-        color: #2c2c2c;
-        transition: all 0.2s;
-        cursor: pointer;
-      }
-      .nav-link:hover {
-        background-color: #6b4ce6;
-        color: #ffffff;
-        transform: translateX(5px);
-      }
-      .nav-link-content {
-        flex: 1;
-      }
-      .nav-link-title {
-        font-weight: 600;
-        font-size: 1rem;
-        margin-bottom: 0.2rem;
-      }
-      .nav-link-desc {
-        font-size: 0.85rem;
-        opacity: 0.7;
-      }
-      .nav-link-arrow {
-        font-size: 1.2rem;
-        opacity: 0.5;
-      }
-      .nav-link:hover .nav-link-arrow {
-        opacity: 1;
-      }
-      .content-wrapper {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 2rem;
-        align-items: start;
-      }
-      .sidebar {
-        position: sticky;
-        top: 1rem;
-      }
-      .main-content {
-        min-width: 0;
-      }
+
+      /* --- MEDIA QUERIES --- */
+
       @media (max-width: 1400px) {
         .left-sidebar-ad,
         .right-sidebar-ad {
           display: none;
         }
       }
-      @media (max-width: 900px) {
-        .content-wrapper {
-          grid-template-columns: 1fr;
-        }
-        .sidebar {
-          position: relative;
-          top: 0;
-        }
-      }
+      
+      /* Mobile Responsiveness adjustments */
       @media (max-width: 600px) {
         .search {
           flex-direction: column;
@@ -466,8 +375,56 @@
         #searchInput {
           min-width: auto;
         }
+        
+        /* Force 3 to 4 items per row on mobile (MyInstants style) */
         .grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+          gap: 0.75rem;
+        }
+
+        /* Shrink buttons for mobile */
+        .button {
+          width: 100%; /* Fill the grid cell */
+          aspect-ratio: 1; /* Keep square */
+          height: auto;
+          max-width: 120px;
+          border-width: 4px; /* Thinner border */
+          border-radius: 25px; /* Roundness adjusted */
+          font-size: 1.5rem; /* Smaller Play Icon */
+        }
+        
+        .button:hover {
+            border-width: 4px;
+        }
+        
+        .button:active {
+            border-width: 3px;
+        }
+
+        /* Adjust Info Text */
+        .sound-info {
+            gap: 2px;
+            margin-top: 0.4rem;
+        }
+
+        .sound-name {
+            font-size: 0.7rem; /* Smaller text */
+        }
+
+        /* Smaller Download Button */
+        .Btn {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+        }
+        .svgIcon {
+            height: 0.8em;
+        }
+        .icon2 {
+            display: none; /* Hide decorative part on very small screens */
+        }
+        .tooltip {
+            display: none; /* Hide tooltips on mobile */
         }
       }
     </style>
@@ -677,7 +634,7 @@
         currentAudio.play().catch((e) => console.error("Playback failed:", e));
       }
 
-      // Updated Ad Element creation for infinite scroll grid
+      // Ad Element creation for infinite scroll grid
       function createAdElement() {
         const adContainer = document.createElement("div");
         adContainer.className = "inline-ad ad adsterra-wrapper";
@@ -731,13 +688,16 @@
         const grid = document.getElementById("soundsGrid");
         grid.innerHTML = "";
 
-        // Calculate items per row based on grid layout
-        const itemsPerRow = Math.floor(grid.offsetWidth / 180) || 6; // 160px + 20px gap, default to 6
+        // Calculate items per row based on grid layout width
+        // For ads: we want them approx every 3 rows of content
+        // On mobile with small buttons (approx 90px wide), itemsPerRow will be larger
+        const itemsPerRow = Math.floor(grid.offsetWidth / 180) || 6; 
         const rowsBeforeAd = 3;
         const itemsBeforeAd = itemsPerRow * rowsBeforeAd;
 
         sounds.forEach((sound, index) => {
-          // Insert ad every 3 rows
+          // Insert ad logic
+          // Note: Logic is slightly approximate on mobile due to variable widths, but ensures ads appear
           if (index > 0 && index % itemsBeforeAd === 0) {
             const adElement = createAdElement();
             grid.appendChild(adElement);
@@ -1021,7 +981,6 @@
 
       // Initialize ads after content loads
       function initializeAds() {
-        // Use setTimeout to ensure DOM is fully rendered with dimensions
         setTimeout(() => {
           try {
              /* // --- ADSENSE LOGIC (COMMENTED OUT) ---
