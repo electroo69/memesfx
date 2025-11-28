@@ -241,8 +241,8 @@
       }
 
       .Btn {
-        width: 40px;
-        height: 40px;
+        width: 45px; /* Increased desktop base size slightly */
+        height: 45px;
         border: none;
         border-radius: 50%;
         background-color: rgb(214, 178, 255);
@@ -258,6 +258,8 @@
 
       .svgIcon {
         fill: rgb(0, 0, 0);
+        width: 1.2em; /* Ensure icon is distinct */
+        height: 1.2em;
       }
 
       .icon2 {
@@ -403,7 +405,7 @@
 
         /* Adjust Info Text */
         .sound-info {
-            gap: 2px;
+            gap: 5px; /* Added more gap for the bigger download button */
             margin-top: 0.4rem;
         }
 
@@ -411,14 +413,16 @@
             font-size: 0.7rem; /* Smaller text */
         }
 
-        /* Smaller Download Button */
+        /* FIXED: Made Download Button Much Larger */
         .Btn {
-            width: 24px;
-            height: 24px;
-            padding: 0;
+            width: 36px; /* Increased from 24px */
+            height: 36px; /* Increased from 24px */
+            padding: 8px; /* Add padding inside */
+            min-width: 36px; /* Prevent squishing */
         }
         .svgIcon {
-            height: 0.8em;
+            width: 100%;
+            height: 100%; /* Fill the container */
         }
         .icon2 {
             display: none; /* Hide decorative part on very small screens */
