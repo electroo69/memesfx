@@ -163,7 +163,7 @@
       /* Grid System */
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 1.5rem;
         margin-bottom: 3rem;
       }
@@ -172,7 +172,7 @@
       .sound-card {
         background: var(--bg-card);
         border-radius: var(--radius-xl);
-        padding: 1.25rem;
+        padding: 1.5rem; /* Increased padding slightly */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -184,7 +184,7 @@
         position: relative;
         overflow: hidden;
         height: 100%;
-        min-height: 220px;
+        min-height: 260px; /* Increased height to fit larger button */
       }
 
       .sound-card:hover {
@@ -220,9 +220,9 @@
       }
 
       .play-button {
-        width: 80px;
-        height: 80px;
-        border-radius: 28px; /* Squircle */
+        width: 110px; /* Increased size significantly */
+        height: 110px; /* Increased size significantly */
+        border-radius: 36px; /* Adjusted radius for larger size */
         background: var(--btn-color);
         border: none;
         cursor: pointer;
@@ -230,20 +230,19 @@
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 2rem;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 10px 20px -5px var(--btn-shadow);
       }
 
       .play-button svg {
         fill: currentColor;
-        width: 32px;
-        height: 32px;
-        margin-left: 4px; /* Optical center adjustment */
+        width: 48px; /* Larger icon */
+        height: 48px; /* Larger icon */
+        margin-left: 6px; /* Optical center adjustment */
       }
 
       .play-button:hover {
-        transform: scale(1.1) rotate(-3deg);
+        transform: scale(1.05) rotate(-2deg);
       }
 
       .play-button:active {
@@ -259,16 +258,14 @@
 
       .sound-title {
         display: block;
-        font-weight: 700;
-        font-size: 0.95rem;
+        font-weight: 800; /* Made slightly bolder like the image */
+        font-size: 1.1rem; /* Slightly larger title */
         color: var(--text-main);
         text-decoration: none;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        white-space: nowrap;
         line-height: 1.3;
       }
 
@@ -279,19 +276,19 @@
       /* Minimal Download Button */
       .download-btn {
         width: 100%;
-        padding: 0.5rem;
+        padding: 0.6rem;
         border-radius: var(--radius-md);
         border: 1px solid #E2E8F0;
         background: white;
         color: var(--text-muted);
-        font-size: 0.8rem;
-        font-weight: 600;
+        font-size: 0.85rem;
+        font-weight: 700;
         cursor: pointer;
         transition: all 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: 8px;
       }
 
       .download-btn:hover {
@@ -301,8 +298,8 @@
       }
 
       .download-btn svg {
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
         fill: currentColor;
       }
 
@@ -317,14 +314,18 @@
       }
 
       #singleSoundContainer .sound-card {
-        width: 300px;
-        height: 350px;
+        width: 340px;
+        height: 400px;
       }
 
       #singleSoundContainer .play-button {
-        width: 120px;
-        height: 120px;
-        font-size: 3rem;
+        width: 140px;
+        height: 140px;
+      }
+
+      #singleSoundContainer .play-button svg {
+        width: 60px;
+        height: 60px;
       }
 
       #backBtn {
@@ -415,13 +416,17 @@
           gap: 1rem;
         }
         .sound-card {
-          min-height: 180px;
+          min-height: 220px;
           padding: 1rem;
         }
         .play-button {
-          width: 60px;
-          height: 60px;
-          border-radius: 20px;
+          width: 80px;
+          height: 80px;
+          border-radius: 24px;
+        }
+        .play-button svg {
+            width: 32px;
+            height: 32px;
         }
         .search-wrapper {
           padding: 0 1rem;
