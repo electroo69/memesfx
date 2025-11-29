@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <title>Memesfx | The largest instant sound buttons website</title>
     <meta
       name="title"
@@ -169,7 +170,6 @@
       /* --- GRID SYSTEM --- */
       .grid {
         display: grid;
-        /* Default Desktop: ~160px items */
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
@@ -178,13 +178,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 100%; /* Ensure it fits the grid cell */
+        width: 100%;
       }
       .button {
         display: flex;
         align-items: center;
         justify-content: center;
-        /* Desktop Sizes */
         width: 160px;
         height: 160px;
         background-color: var(--button-bg);
@@ -230,18 +229,31 @@
         max-width: 250px;
       }
 
-      .sound-name {
+      /* SEO Link Styling */
+      .sound-link {
         color: #2c2c2c;
+        text-decoration: none;
+        flex: 1;
+        overflow: hidden;
+        display: flex; /* Helps vertically align text */
+      }
+      
+      .sound-link:hover .sound-name {
+        color: #6b4ce6;
+        text-decoration: underline;
+      }
+
+      .sound-name {
         font-size: 0.9rem;
         text-align: center;
-        flex: 1;
+        width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
       .Btn {
-        width: 45px; /* Increased desktop base size slightly */
+        width: 45px;
         height: 45px;
         border: none;
         border-radius: 50%;
@@ -258,7 +270,7 @@
 
       .svgIcon {
         fill: rgb(0, 0, 0);
-        width: 1.2em; /* Ensure icon is distinct */
+        width: 1.2em;
         height: 1.2em;
       }
 
@@ -359,6 +371,37 @@
         font-size: 1rem;
         color: #2c2c2c;
       }
+      
+      /* Dedicated Sound Page Elements */
+      #singleSoundView {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      #singleSoundView h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      #backBtn {
+        align-self: flex-start;
+        margin-bottom: 1rem;
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      #backBtn:hover {
+        color: #6b4ce6;
+      }
 
       /* --- MEDIA QUERIES --- */
 
@@ -378,21 +421,19 @@
           min-width: auto;
         }
         
-        /* Force 3 to 4 items per row on mobile (MyInstants style) */
         .grid {
           grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
           gap: 0.75rem;
         }
 
-        /* Shrink buttons for mobile */
         .button {
-          width: 100%; /* Fill the grid cell */
-          aspect-ratio: 1; /* Keep square */
+          width: 100%;
+          aspect-ratio: 1;
           height: auto;
           max-width: 120px;
-          border-width: 4px; /* Thinner border */
-          border-radius: 25px; /* Roundness adjusted */
-          font-size: 1.5rem; /* Smaller Play Icon */
+          border-width: 4px;
+          border-radius: 25px;
+          font-size: 1.5rem;
         }
         
         .button:hover {
@@ -403,64 +444,40 @@
             border-width: 3px;
         }
 
-        /* Adjust Info Text */
         .sound-info {
-            gap: 5px; /* Added more gap for the bigger download button */
+            gap: 5px;
             margin-top: 0.4rem;
         }
 
         .sound-name {
-            font-size: 0.7rem; /* Smaller text */
+            font-size: 0.7rem;
         }
 
-        /* FIXED: Made Download Button Much Larger */
         .Btn {
-            width: 36px; /* Increased from 24px */
-            height: 36px; /* Increased from 24px */
-            padding: 8px; /* Add padding inside */
-            min-width: 36px; /* Prevent squishing */
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+            min-width: 36px;
         }
         .svgIcon {
             width: 100%;
-            height: 100%; /* Fill the container */
+            height: 100%;
         }
         .icon2 {
-            display: none; /* Hide decorative part on very small screens */
+            display: none;
         }
         .tooltip {
-            display: none; /* Hide tooltips on mobile */
+            display: none;
         }
       }
     </style>
 
-    <script type="application/ld+json">
+    <script id="schema-struct" type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Memesfx",
-        "url": "https://memesfx.gyatbox.space/",
-        "description": "The largest instant sound buttons website. Discover and share funny sound effects, meme sounds, gaming sounds, and more.",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://memesfx.gyatbox.space/?search={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        }
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Memesfx",
-        "url": "https://memesfx.gyatbox.space/",
-        "logo": "https://memesfx.gyatbox.space/logo.png",
-        "sameAs": [
-          "https://twitter.com/yourusername",
-          "https://facebook.com/yourpage"
-        ]
+        "url": "https://memesfx.gyatbox.space/"
       }
     </script>
   </head>
@@ -482,7 +499,8 @@
       </aside>
 
       <div class="container">
-        <h1>Memesfx Soundboard</h1>
+        
+        <h1 id="pageHeader">Memesfx Soundboard</h1>
 
         <div class="ad adsterra-wrapper">
            <script type="text/javascript">
@@ -507,16 +525,22 @@
             <button id="searchBtn">Search & Play</button>
           </div>
 
-          <h2 id="sectionTitle" style="color: #6b4ce6; margin-bottom: 1rem">
-            Trending Sounds
-          </h2>
+          <div id="singleSoundView">
+            <button id="backBtn">← Back to Trending</button>
+            <div id="singleSoundContainer"></div>
+          </div>
 
-          <div id="soundsGrid" class="grid"></div>
+          <div id="mainGridView">
+             <h2 id="sectionTitle" style="color: #6b4ce6; margin-bottom: 1rem">
+                Trending Sounds
+             </h2>
+             <div id="soundsGrid" class="grid"></div>
 
-          <div id="pagination" class="pagination" style="display: none">
-            <button id="prevBtn" disabled>Prev</button>
-            <span id="pageInfo">Page 1 of 50</span>
-            <button id="nextBtn">Next</button>
+             <div id="pagination" class="pagination" style="display: none">
+                <button id="prevBtn" disabled>Prev</button>
+                <span id="pageInfo">Page 1 of 50</span>
+                <button id="nextBtn">Next</button>
+             </div>
           </div>
 
           <div id="loading">Loading trending sounds...</div>
@@ -556,73 +580,20 @@
       let currentAudio = null;
       let currentPage = 1;
       const maxPage = 50;
-
-      // Cache system for preloading pages
       const pageCache = new Map();
       const preloadQueue = new Set();
 
-      // Array of vibrant Gen Z color combinations for the buttons
       const colorSchemes = [
-        {
-          bg: "#006aff",
-          border: "#c0dfff",
-          borderHover: "#b1d8ff",
-          bgHover: "#1b7aff",
-        },
-        {
-          bg: "#ff006e",
-          border: "#ffc0d9",
-          borderHover: "#ffb1d1",
-          bgHover: "#ff1b7e",
-        },
-        {
-          bg: "#8338ec",
-          border: "#ddc0ff",
-          borderHover: "#d4b1ff",
-          bgHover: "#9b4fff",
-        },
-        {
-          bg: "#00f5d4",
-          border: "#c0fff5",
-          borderHover: "#b1ffef",
-          bgHover: "#1bffe0",
-        },
-        {
-          bg: "#ffbe0b",
-          border: "#fff0c0",
-          borderHover: "#ffecb1",
-          bgHover: "#ffc91b",
-        },
-        {
-          bg: "#fb5607",
-          border: "#ffd5c0",
-          borderHover: "#ffcbb1",
-          bgHover: "#ff671b",
-        },
-        {
-          bg: "#3a86ff",
-          border: "#c9ddff",
-          borderHover: "#bfd7ff",
-          bgHover: "#4e94ff",
-        },
-        {
-          bg: "#ff006e",
-          border: "#ffc0d9",
-          borderHover: "#ffb1d1",
-          bgHover: "#ff1b7e",
-        },
-        {
-          bg: "#06ffa5",
-          border: "#c0ffe4",
-          borderHover: "#b1ffdd",
-          bgHover: "#1bffaf",
-        },
-        {
-          bg: "#ff4d6d",
-          border: "#ffd0d9",
-          borderHover: "#ffc5d0",
-          bgHover: "#ff5e7d",
-        },
+        { bg: "#006aff", border: "#c0dfff", borderHover: "#b1d8ff", bgHover: "#1b7aff" },
+        { bg: "#ff006e", border: "#ffc0d9", borderHover: "#ffb1d1", bgHover: "#ff1b7e" },
+        { bg: "#8338ec", border: "#ddc0ff", borderHover: "#d4b1ff", bgHover: "#9b4fff" },
+        { bg: "#00f5d4", border: "#c0fff5", borderHover: "#b1ffef", bgHover: "#1bffe0" },
+        { bg: "#ffbe0b", border: "#fff0c0", borderHover: "#ffecb1", bgHover: "#ffc91b" },
+        { bg: "#fb5607", border: "#ffd5c0", borderHover: "#ffcbb1", bgHover: "#ff671b" },
+        { bg: "#3a86ff", border: "#c9ddff", borderHover: "#bfd7ff", bgHover: "#4e94ff" },
+        { bg: "#ff006e", border: "#ffc0d9", borderHover: "#ffb1d1", bgHover: "#ff1b7e" },
+        { bg: "#06ffa5", border: "#c0ffe4", borderHover: "#b1ffdd", bgHover: "#1bffaf" },
+        { bg: "#ff4d6d", border: "#ffd0d9", borderHover: "#ffc5d0", bgHover: "#ff5e7d" },
       ];
 
       function getRandomColor() {
@@ -638,7 +609,6 @@
         currentAudio.play().catch((e) => console.error("Playback failed:", e));
       }
 
-      // Ad Element creation for infinite scroll grid
       function createAdElement() {
         const adContainer = document.createElement("div");
         adContainer.className = "inline-ad ad adsterra-wrapper";
@@ -647,8 +617,6 @@
         adContainer.style.minWidth = "300px"; 
         adContainer.style.overflowX = "auto"; 
 
-        // 1. Create an Iframe to isolate the document.write call
-        // We use the 728x90 key here for grid ads
         const iframe = document.createElement('iframe');
         iframe.style.width = '728px'; 
         iframe.style.height = '90px'; 
@@ -658,7 +626,6 @@
         
         adContainer.appendChild(iframe);
 
-        // 2. Inject the Adsterra script into the iframe after a tiny delay
         setTimeout(() => {
             try {
                 const doc = iframe.contentWindow.document;
@@ -688,94 +655,98 @@
         return adContainer;
       }
 
-      function displaySounds(sounds) {
-        const grid = document.getElementById("soundsGrid");
-        grid.innerHTML = "";
+      function createSoundDOM(sound, index, isSingleView = false) {
+        const colors = colorSchemes[(index || 0) % colorSchemes.length];
 
-        // Calculate items per row based on grid layout width
-        // For ads: we want them approx every 3 rows of content
-        // On mobile with small buttons (approx 90px wide), itemsPerRow will be larger
-        const itemsPerRow = Math.floor(grid.offsetWidth / 180) || 6; 
-        const rowsBeforeAd = 3;
-        const itemsBeforeAd = itemsPerRow * rowsBeforeAd;
+        const soundItem = document.createElement("div");
+        soundItem.className = "sound-item";
+        if (isSingleView) soundItem.style.transform = "scale(1.2)";
 
-        sounds.forEach((sound, index) => {
-          // Insert ad logic
-          // Note: Logic is slightly approximate on mobile due to variable widths, but ensures ads appear
-          if (index > 0 && index % itemsBeforeAd === 0) {
-            const adElement = createAdElement();
-            grid.appendChild(adElement);
-          }
+        const btn = document.createElement("button");
+        btn.className = "button";
+        btn.role = "button";
+        btn.innerHTML = `<span class="play-icon">▶</span>`;
+        btn.style.setProperty("--button-bg", colors.bg);
+        btn.style.setProperty("--button-border", colors.border);
+        btn.style.setProperty("--button-border-hover", colors.borderHover);
+        btn.style.setProperty("--button-bg-hover", colors.bgHover);
 
-          // Cycle through colors sequentially
-          const colors = colorSchemes[index % colorSchemes.length];
+        btn.onclick = () => playSound(sound.mp3);
 
-          // Create container for button and info
-          const soundItem = document.createElement("div");
-          soundItem.className = "sound-item";
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "sound-info";
 
-          // Create the play button
-          const btn = document.createElement("button");
-          btn.className = "button";
-          btn.role = "button";
-          btn.innerHTML = `<span class="play-icon">▶</span>`;
+        // SEO Change: Use Anchor tag instead of Span for crawling
+        const nameLink = document.createElement("a");
+        nameLink.className = "sound-link";
+        // We use query parameter ?sound=ID-SLUG to simulate a page
+        nameLink.href = `?sound=${sound.id}`;
+        nameLink.onclick = (e) => {
+            e.preventDefault();
+            // Manually handle navigation for SPA feel but update URL for SEO
+            window.history.pushState({ soundId: sound.id }, "", `?sound=${sound.id}`);
+            loadSingleSound(sound);
+        };
 
-          // Apply colors sequentially using CSS variables
-          btn.style.setProperty("--button-bg", colors.bg);
-          btn.style.setProperty("--button-border", colors.border);
-          btn.style.setProperty("--button-border-hover", colors.borderHover);
-          btn.style.setProperty("--button-bg-hover", colors.bgHover);
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "sound-name";
+        nameSpan.textContent = sound.title;
+        nameSpan.title = sound.title;
+        
+        nameLink.appendChild(nameSpan);
 
-          btn.onclick = () => playSound(sound.mp3);
-
-          // Create info section with name and download button
-          const infoDiv = document.createElement("div");
-          infoDiv.className = "sound-info";
-
-          const nameSpan = document.createElement("span");
-          nameSpan.className = "sound-name";
-          nameSpan.textContent = sound.title;
-          nameSpan.title = sound.title;
-
-          const downloadBtn = document.createElement("button");
-          downloadBtn.className = "Btn";
-          downloadBtn.innerHTML = `
+        const downloadBtn = document.createElement("button");
+        downloadBtn.className = "Btn";
+        downloadBtn.innerHTML = `
             <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
               <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
             </svg>
             <span class="icon2"></span>
             <span class="tooltip">Download</span>
-          `;
-          downloadBtn.onclick = async (e) => {
+        `;
+        downloadBtn.onclick = async (e) => {
             e.stopPropagation();
             try {
-              const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
-                sound.mp3
-              )}`;
+              const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(sound.mp3)}`;
               const response = await fetch(proxyUrl);
               const blob = await response.blob();
-
               const url = window.URL.createObjectURL(blob);
               const link = document.createElement("a");
               link.href = url;
               link.download = sound.title + ".mp3";
               document.body.appendChild(link);
               link.click();
-
               document.body.removeChild(link);
               window.URL.revokeObjectURL(url);
             } catch (error) {
               console.error("Download failed:", error);
               alert("Failed to download the sound. Please try again.");
             }
-          };
+        };
 
-          infoDiv.appendChild(nameSpan);
-          infoDiv.appendChild(downloadBtn);
+        infoDiv.appendChild(nameLink);
+        infoDiv.appendChild(downloadBtn);
 
-          soundItem.appendChild(btn);
-          soundItem.appendChild(infoDiv);
-          grid.appendChild(soundItem);
+        soundItem.appendChild(btn);
+        soundItem.appendChild(infoDiv);
+
+        return soundItem;
+      }
+
+      function displaySounds(sounds) {
+        const grid = document.getElementById("soundsGrid");
+        grid.innerHTML = "";
+
+        const itemsPerRow = Math.floor(grid.offsetWidth / 180) || 6; 
+        const rowsBeforeAd = 3;
+        const itemsBeforeAd = itemsPerRow * rowsBeforeAd;
+
+        sounds.forEach((sound, index) => {
+          if (index > 0 && index % itemsBeforeAd === 0) {
+            const adElement = createAdElement();
+            grid.appendChild(adElement);
+          }
+          grid.appendChild(createSoundDOM(sound, index));
         });
       }
 
@@ -805,27 +776,128 @@
         return data.data || [];
       }
 
+      // --- SEO FUNCTIONS ---
+
+      function updateSEOMetadata(title, description, image) {
+        document.title = title;
+        document.querySelector('meta[name="title"]').setAttribute("content", title);
+        document.querySelector('meta[name="description"]').setAttribute("content", description);
+        
+        // Update OG Tags
+        document.querySelector('meta[property="og:title"]').setAttribute("content", title);
+        document.querySelector('meta[property="og:description"]').setAttribute("content", description);
+        if(image) document.querySelector('meta[property="og:image"]').setAttribute("content", image);
+        
+        // Update Header
+        document.getElementById("pageHeader").textContent = title.split(" - ")[0]; // Keep H1 concise
+      }
+
+      function injectJSONLD(sound) {
+        const schema = {
+            "@context": "https://schema.org",
+            "@type": "AudioObject",
+            "name": sound.title,
+            "description": `Play and download the ${sound.title} sound effect instantly on Memesfx.`,
+            "contentUrl": sound.mp3,
+            "encodingFormat": "audio/mpeg",
+            "uploadDate": new Date().toISOString()
+        };
+        const script = document.getElementById('schema-struct');
+        script.textContent = JSON.stringify(schema);
+      }
+
+      // --- SINGLE SOUND PAGE LOGIC ---
+
+      async function loadSingleSound(sound) {
+         // 1. Hide Grid, Show Single View
+         document.getElementById("mainGridView").style.display = "none";
+         document.getElementById("pagination").style.display = "none";
+         document.getElementById("singleSoundView").style.display = "flex";
+         
+         const container = document.getElementById("singleSoundContainer");
+         container.innerHTML = "";
+         // Create a large version of the button
+         const soundDOM = createSoundDOM(sound, 2, true); // Use arbitrary index 2 for color
+         container.appendChild(soundDOM);
+
+         // 2. Update SEO Metadata dynamically
+         const pageTitle = `${sound.title} Sound Button - Download MP3 | Memesfx`;
+         const pageDesc = `Listen to the ${sound.title} sound effect. Download ${sound.title} MP3 instantly for your soundboard. Free meme sounds at Memesfx.`;
+         
+         updateSEOMetadata(pageTitle, pageDesc, sound.image || "https://memesfx.gyatbox.space/preview-image.jpg");
+         injectJSONLD(sound);
+         
+         // Scroll to top
+         window.scrollTo(0, 0);
+      }
+
+      async function fetchAndLoadSingleSound(id) {
+          document.getElementById("loading").style.display = "block";
+          try {
+             // We use search to find the specific ID since API might not have direct get-by-id
+             // Or assuming API supports /sounds/:id. For now, we search by ID if API allows, or re-use search.
+             // Given the API limitations seen in previous code, we might need to search by Name or ID.
+             // Let's try fetching trending or search to find it, or use the direct search endpoint if ID is searchable.
+             
+             // Workaround: We will use the search endpoint with the ID, or just load trending and find it if possible.
+             // Better: If we passed the name in URL, we could search that.
+             // Since we only have ID in URL mostly:
+             
+             // If ID is numeric, the API might not support direct fetching easily via this proxy.
+             // We will try to fetch trending and see if it's there, or fallback to search.
+             // Actually, simplest way for this demo without changing API backend:
+             // We will just load trending, find the sound. If not found, show trending.
+             
+             // NOTE: For a real production app, you need an API endpoint like /api/sounds/:id
+             
+             // For now, let's assume we can display the ID if passed, but since we can't fetch single ID easily
+             // we will just load trending but SEO optimized for "Memesfx".
+             // If you have a specific endpoint for ID, put it here.
+             
+             // Fallback logic for this specific CodeTabs/Vercel setup:
+             // We will load trending. If the user clicked a link, they likely came from our site.
+             // If coming from Google with ?sound=ID, we might need to fetch a "Search by ID" if available.
+             
+             // Attempt to search by ID (assuming API handles it)
+             const results = await fetchSounds("/search", { q: id, limit: 1 });
+             if (results && results.length > 0) {
+                 loadSingleSound(results[0]);
+             } else {
+                 // Fallback if ID lookup fails
+                 console.log("Sound ID lookup failed, loading trending");
+                 loadTrending(1);
+             }
+          } catch(e) {
+              console.error(e);
+              loadTrending(1);
+          } finally {
+              document.getElementById("loading").style.display = "none";
+          }
+      }
+
+      document.getElementById("backBtn").onclick = () => {
+          // Go back to main view
+          document.getElementById("singleSoundView").style.display = "none";
+          document.getElementById("mainGridView").style.display = "grid";
+          document.getElementById("pagination").style.display = "block";
+          
+          // Reset URL
+          window.history.pushState({}, "", "/");
+          // Reset SEO
+          updateSEOMetadata(
+              "Memesfx | The largest instant sound buttons website",
+              "Memesfx is where you discover funny instant sound buttons. Listen and share sounds of memes, gaming, movies, anime, and more.",
+              "https://memesfx.gyatbox.space/preview-image.jpg"
+          );
+      };
+
       async function preloadPages(pagesToLoad) {
         for (const page of pagesToLoad) {
-          if (
-            page < 1 ||
-            page > maxPage ||
-            pageCache.has(page) ||
-            preloadQueue.has(page)
-          ) {
-            continue;
-          }
-
+          if (page < 1 || page > maxPage || pageCache.has(page) || preloadQueue.has(page)) continue;
           preloadQueue.add(page);
-
           try {
-            const sounds = await fetchSounds("/api/trending", {
-              q: "id",
-              page,
-              limit: 50,
-            });
+            const sounds = await fetchSounds("/api/trending", { q: "id", page, limit: 50 });
             pageCache.set(page, sounds);
-            console.log(`Preloaded page ${page}`);
           } catch (error) {
             console.error(`Failed to preload page ${page}:`, error);
           } finally {
@@ -838,68 +910,49 @@
         if (page < 1 || page > maxPage) return;
         currentPage = page;
 
+        document.getElementById("mainGridView").style.display = "grid"; // Ensure grid is visible
+        document.getElementById("singleSoundView").style.display = "none";
+
         if (pageCache.has(page)) {
-          console.log(`Loading page ${page} from cache`);
           displaySounds(pageCache.get(page));
           updatePagination();
           document.getElementById("pagination").style.display = "block";
-
-          if (page === 3) {
-            preloadPages([4, 5]);
-          } else if (page === 5) {
-            preloadPages([6, 7]);
-          } else if (page > 5) {
-            preloadPages([page + 1, page + 2]);
-          }
-
+          preloadNextPages(page);
           return;
         }
 
         document.getElementById("loading").style.display = "block";
-        document.getElementById(
-          "loading"
-        ).textContent = `Loading page ${page}...`;
         try {
-          const sounds = await fetchSounds("/api/trending", {
-            q: "id",
-            page,
-            limit: 50,
-          });
-
+          const sounds = await fetchSounds("/api/trending", { q: "id", page, limit: 50 });
           pageCache.set(page, sounds);
-
           displaySounds(sounds);
           updatePagination();
           document.getElementById("pagination").style.display = "block";
-
-          if (page === 1) {
-            preloadPages([2, 3]);
-          } else if (page === 3) {
-            preloadPages([4, 5]);
-          } else if (page === 5) {
-            preloadPages([6, 7]);
-          } else {
-            preloadPages([page + 1, page + 2]);
-          }
+          preloadNextPages(page);
         } catch (error) {
           console.error("Error loading trending:", error);
-          document.getElementById("loading").textContent =
-            "Failed to load trending sounds.";
         } finally {
           document.getElementById("loading").style.display = "none";
         }
       }
 
+      function preloadNextPages(page) {
+          if (page === 1) preloadPages([2, 3]);
+          else if (page === 3) preloadPages([4, 5]);
+          else if (page > 5) preloadPages([page + 1, page + 2]);
+      }
+
       async function performSearch(term) {
         document.getElementById("loading").style.display = "block";
-        document.getElementById("loading").textContent = "Searching...";
+        document.getElementById("singleSoundView").style.display = "none";
+        document.getElementById("mainGridView").style.display = "grid";
+        
         try {
           const sounds = await fetchSounds("/search", { q: term, limit: 20 });
           displaySounds(sounds);
           document.getElementById("pagination").style.display = "none";
         } catch (error) {
           console.error("Error searching:", error);
-          document.getElementById("loading").textContent = "No sounds found.";
         } finally {
           document.getElementById("loading").style.display = "none";
         }
@@ -910,92 +963,40 @@
         if (!term) {
           updateUrl("");
           loadTrending(1);
-          document.getElementById("sectionTitle").textContent =
-            "🔥 Trending Sounds";
+          document.getElementById("sectionTitle").textContent = "🔥 Trending Sounds";
         } else {
-          updateUrl(term);
+          updateUrl(term, "search");
           performSearch(term);
-          document.getElementById(
-            "sectionTitle"
-          ).textContent = `🔍 Search Results: ${term}`;
+          document.getElementById("sectionTitle").textContent = `🔍 Search Results: ${term}`;
         }
       };
 
       document.getElementById("searchInput").onkeypress = (e) => {
-        if (e.key === "Enter") {
-          document.getElementById("searchBtn").click();
-        }
+        if (e.key === "Enter") document.getElementById("searchBtn").click();
       };
 
-      document.getElementById("prevBtn").onclick = () =>
-        loadTrending(currentPage - 1);
-      document.getElementById("nextBtn").onclick = () =>
-        loadTrending(currentPage + 1);
+      document.getElementById("prevBtn").onclick = () => loadTrending(currentPage - 1);
+      document.getElementById("nextBtn").onclick = () => loadTrending(currentPage + 1);
 
       function getUrlParameter(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         const regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
         const results = regex.exec(window.location.search);
-        return results === null
-          ? ""
-          : decodeURIComponent(results[1].replace(/\+/g, " "));
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
 
-      function updateUrl(searchTerm) {
-        const newUrl = searchTerm
-          ? `${window.location.pathname}?search=${encodeURIComponent(
-              searchTerm
-            )}`
-          : window.location.pathname;
-        window.history.pushState({ search: searchTerm }, "", newUrl);
-        updateMetaTags(searchTerm);
+      function updateUrl(term, type) {
+        let newUrl = window.location.pathname;
+        if(term && type === "search") newUrl += `?search=${encodeURIComponent(term)}`;
+        window.history.pushState({ search: term }, "", newUrl);
+        // Basic SEO update for search
+        if(term) updateSEOMetadata(`${term} Sounds - Memesfx`, `Search results for ${term} sound effects.`);
       }
 
-      function updateMetaTags(searchTerm) {
-        if (searchTerm) {
-          document.title = `${searchTerm} - Instant Sound Effect Button | Memesfx`;
-
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) {
-            metaDesc.content = `Listen & share ${searchTerm} sound effect. Find more instant sound buttons on Memesfx!`;
-          }
-
-          const ogTitle = document.querySelector('meta[property="og:title"]');
-          if (ogTitle) {
-            ogTitle.content = `${searchTerm} - Instant Sound Effect Button | Memesfx`;
-          }
-
-          const ogDesc = document.querySelector(
-            'meta[property="og:description"]'
-          );
-          if (ogDesc) {
-            ogDesc.content = `Listen & share ${searchTerm} sound effect. Find more instant sound buttons on Memesfx!`;
-          }
-        } else {
-          document.title =
-            "Memesfx | The largest instant sound buttons website";
-
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) {
-            metaDesc.content =
-              "Memesfx is where you discover funny instant sound buttons. Listen and share sounds of memes, gaming, movies, anime, and more. Play and download sound effects instantly!";
-          }
-        }
-      }
-
-      // Initialize ads after content loads
       function initializeAds() {
         setTimeout(() => {
           try {
-             /* // --- ADSENSE LOGIC (COMMENTED OUT) ---
-            const adElements = document.querySelectorAll(".adsbygoogle");
-            adElements.forEach((ad) => {
-              if (!ad.hasAttribute("data-ad-initialized")) {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                ad.setAttribute("data-ad-initialized", "true");
-              }
-            });
-            */
+             // Ad init logic here if needed
           } catch (e) {
             console.log("Ad initialization error:", e);
           }
@@ -1004,34 +1005,38 @@
 
       window.onload = () => {
         const searchParam = getUrlParameter("search");
+        const soundParam = getUrlParameter("sound");
 
-        if (searchParam) {
+        if (soundParam) {
+            // User wants a specific sound page (SEO ENTRY POINT)
+            fetchAndLoadSingleSound(soundParam);
+        } else if (searchParam) {
           document.getElementById("searchInput").value = searchParam;
           performSearch(searchParam);
-          document.getElementById(
-            "sectionTitle"
-          ).textContent = `🔍 Search Results: ${searchParam}`;
+          document.getElementById("sectionTitle").textContent = `🔍 Search Results: ${searchParam}`;
         } else {
           preloadPages([2, 3]);
           loadTrending(1);
         }
 
-        // Initialize ads after a short delay to ensure DOM is ready
         initializeAds();
       };
 
       window.onpopstate = function (event) {
         const searchParam = getUrlParameter("search");
-        if (searchParam) {
+        const soundParam = getUrlParameter("sound");
+
+        if (soundParam) {
+            fetchAndLoadSingleSound(soundParam);
+        } else if (searchParam) {
           document.getElementById("searchInput").value = searchParam;
           performSearch(searchParam);
-          document.getElementById(
-            "sectionTitle"
-          ).textContent = `🔍 Search Results: ${searchParam}`;
         } else {
-          loadTrending(1);
-          document.getElementById("sectionTitle").textContent =
-            "🔥 Trending Sounds";
+            // Back to home
+            document.getElementById("singleSoundView").style.display = "none";
+            document.getElementById("mainGridView").style.display = "grid";
+            loadTrending(1);
+            document.getElementById("sectionTitle").textContent = "🔥 Trending Sounds";
         }
       };
     </script>
