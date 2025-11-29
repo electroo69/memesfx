@@ -142,7 +142,7 @@
         background: #334155;
       }
 
-      /* Ad Containers */
+      /* Ad Containers - General */
       .ad-container {
         background: #fff;
         border-radius: var(--radius-lg);
@@ -172,7 +172,7 @@
       .sound-card {
         background: var(--bg-card);
         border-radius: var(--radius-xl);
-        padding: 1.5rem; /* Increased padding slightly */
+        padding: 1.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -184,13 +184,25 @@
         position: relative;
         overflow: hidden;
         height: 100%;
-        min-height: 260px; /* Increased height to fit larger button */
+        min-height: 260px;
       }
 
       .sound-card:hover {
         transform: translateY(-8px) scale(1.02);
         box-shadow: var(--shadow-hover);
         border-color: transparent;
+      }
+      
+      /* Specific styling for the In-Feed Ad Card */
+      .ad-card {
+        padding: 0;
+        justify-content: center;
+        background: #f8fafc; /* Slight grey to differentiate */
+        border: 1px dashed #cbd5e1;
+      }
+      .ad-card:hover {
+        transform: none; /* No lift effect for ads */
+        box-shadow: none;
       }
 
       /* Decorative Background Blob */
@@ -220,9 +232,9 @@
       }
 
       .play-button {
-        width: 110px; /* Increased size significantly */
-        height: 110px; /* Increased size significantly */
-        border-radius: 36px; /* Adjusted radius for larger size */
+        width: 110px;
+        height: 110px;
+        border-radius: 36px;
         background: var(--btn-color);
         border: none;
         cursor: pointer;
@@ -236,9 +248,9 @@
 
       .play-button svg {
         fill: currentColor;
-        width: 48px; /* Larger icon */
-        height: 48px; /* Larger icon */
-        margin-left: 6px; /* Optical center adjustment */
+        width: 48px;
+        height: 48px;
+        margin-left: 6px;
       }
 
       .play-button:hover {
@@ -258,8 +270,8 @@
 
       .sound-title {
         display: block;
-        font-weight: 800; /* Made slightly bolder like the image */
-        font-size: 1.1rem; /* Slightly larger title */
+        font-weight: 800;
+        font-size: 1.1rem;
         color: var(--text-main);
         text-decoration: none;
         margin-bottom: 0.75rem;
@@ -418,6 +430,10 @@
         .sound-card {
           min-height: 220px;
           padding: 1rem;
+        }
+        /* Mobile specific adjustment for ads if they are too big */
+        .ad-card {
+            overflow: hidden;
         }
         .play-button {
           width: 80px;
@@ -588,37 +604,56 @@
         currentAudio.play().catch((e) => console.error("Playback failed:", e));
       }
 
-      function createAdElement() {
-        // Keeps the layout stable but wraps ad logic
-        const container = document.createElement("div");
-        container.className = "ad-container";
-        container.style.gridColumn = "1 / -1"; // Span full width in grid
+      // 1. Create the specific In-Feed Ad Card (300x250)
+      function createInFeedAd() {
+        const card = document.createElement("div");
+        card.className = "sound-card ad-card"; 
         
+        // Create an iframe to hold the ad safely
         const iframe = document.createElement('iframe');
-        iframe.style.width = '728px'; 
-        iframe.style.height = '90px'; 
+        iframe.style.width = '300px'; 
+        iframe.style.height = '250px'; 
         iframe.style.border = 'none';
         iframe.scrolling = "no";
         
-        container.appendChild(iframe);
+        // Wrapper to center the ad inside the card
+        const wrapper = document.createElement('div');
+        wrapper.style.display = "flex";
+        wrapper.style.justifyContent = "center";
+        wrapper.style.alignItems = "center";
+        wrapper.style.width = "100%";
+        wrapper.style.height = "100%";
+        wrapper.style.overflow = "hidden";
+        
+        wrapper.appendChild(iframe);
+        card.appendChild(wrapper);
 
+        // Inject the specific ad code provided
         setTimeout(() => {
             try {
                 const doc = iframe.contentWindow.document;
                 doc.open();
                 doc.write(`
-                    <html><body style="margin:0;padding:0;display:flex;justify-content:center;">
+                    <html>
+                    <body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;height:100vh;">
                     <script type="text/javascript">
-                        atOptions = { 'key' : 'c50bb328670da58a01a9ba5ef5827975', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+                        atOptions = {
+                            'key' : '779520aa602be4ce8eca6a1d6012e88a',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                        };
                     <\/script>
-                    <script type="text/javascript" src="//www.highperformanceformat.com/c50bb328670da58a01a9ba5ef5827975/invoke.js"><\/script>
-                    </body></html>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/779520aa602be4ce8eca6a1d6012e88a/invoke.js"><\/script>
+                    </body>
+                    </html>
                 `);
                 doc.close();
             } catch (e) { console.log("Ad injection error", e); }
-        }, 50);
+        }, 100);
 
-        return container;
+        return card;
       }
 
       function createSoundDOM(sound, index, isSingleView = false) {
@@ -707,13 +742,10 @@
         const grid = document.getElementById("soundsGrid");
         grid.innerHTML = "";
 
-        const itemsPerRow = Math.floor(grid.offsetWidth / 200) || 4; 
-        const rowsBeforeAd = 2;
-        const itemsBeforeAd = itemsPerRow * rowsBeforeAd;
-
         sounds.forEach((sound, index) => {
-          if (index > 0 && index % 12 === 0) { // Insert ad every 12 items
-            grid.appendChild(createAdElement());
+          // 2. Logic: Insert Ad every 8 cards (after card 8, 16, 24...)
+          if (index > 0 && index % 8 === 0) {
+             grid.appendChild(createInFeedAd());
           }
           grid.appendChild(createSoundDOM(sound, index));
         });
