@@ -3,14 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Vital for routing /sound/name correctly -->
     <base href="/" />
     
     <title>Memesfx | The Modern Soundboard</title>
     <meta name="title" content="Memesfx | The Modern Soundboard" />
     <meta name="description" content="Discover funny instant sound buttons. Listen and share sounds of memes, gaming, movies, anime, and more." />
     
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Memesfx Soundboard" />
     <meta property="og:description" content="Play and download funny meme sounds instantly." />
@@ -234,14 +232,18 @@
         const content = document.createElement("div"); content.className = "card-content";
         const titleLink = document.createElement("a"); titleLink.className = "sound-title";
         
-        // --- NEW URL STRUCTURE ---
-        titleLink.href = `/sound/${sound.id}`;
+        // --- FIX: Remove messy numbers from ID for the URL ---
+        const cleanSlug = sound.id.replace(/-\d+$/, '');
+
+        // --- NEW URL STRUCTURE USING CLEAN SLUG ---
+        titleLink.href = `/sound/${cleanSlug}`;
         
         titleLink.textContent = sound.title;
         titleLink.onclick = (e) => {
             e.preventDefault();
-            // --- PUSH STATE WITH NEW PATH ---
-            window.history.pushState({ soundId: sound.id }, "", `/sound/${sound.id}`);
+            // --- PUSH STATE WITH CLEAN PATH ---
+            // We use the clean slug for the URL
+            window.history.pushState({ soundId: sound.id }, "", `/sound/${cleanSlug}`);
             loadSingleSound(sound);
         };
         content.appendChild(titleLink);
@@ -379,18 +381,19 @@
 
         // Check if we are at /sound/some-id
         if (path.includes('/sound/')) {
+            // Extract the clean ID from the URL path
             const soundId = path.split('/sound/')[1]; // Get 'vine-boom'
             if (soundId) {
-                // Fetch and load
+                // Fetch and load using the clean ID
                 fetchSounds("/search", { q: soundId, limit: 1 }).then(res => {
                    if(res.length) loadSingleSound(res[0]);
                    else loadTrending(1);
                });
-               return; // Stop here
+               return; // Stop here to prevent loading trending
             }
         }
 
-        // Standard logic
+        // Standard logic for homepage or search query params
         if (searchParam) {
            document.getElementById("searchInput").value = searchParam;
            document.getElementById("sectionTitle").textContent = `Results: "${searchParam}"`;
@@ -402,13 +405,20 @@
 
       window.onpopstate = (event) => {
           const path = window.location.pathname;
-          if (path.includes('/sound/') && event.state && event.state.soundId) {
-               // We are in a sound view, but maybe user hit back?
-               // The SPA logic can get complex here, simplest is:
-          } else {
+          // If we are at the root path '/', load trending
+          if (path === '/' || path === '/index.html') {
               document.getElementById("singleSoundView").style.display = "none";
               document.getElementById("mainGridView").style.display = "block";
               displaySounds(pageCache.get(currentPage) || []);
+          } 
+          // If we hit back to a search state
+          else if (event.state && event.state.search) {
+             performSearch(event.state.search);
+          }
+          // If we hit back to a sound state (handling could be improved here for full SPA)
+          else if (path.includes('/sound/')) {
+               // Reload location to trigger onload or implement complex state handling
+               window.location.reload();
           }
       };
     </script>
