@@ -279,48 +279,15 @@
         document.getElementById("nextBtn").disabled = currentPage === maxPage;
       }
 
-async function fetchSounds(endpoint, params) {
+      async function fetchSounds(endpoint, params) {
         let targetUrl = `https://instants-api.vercel.app${endpoint}`;
         const url = new URL(targetUrl);
         Object.entries(params || {}).forEach(([key, value]) => url.searchParams.set(key, value));
-        
-        // 1. Try Primary Proxy (CodeTabs)
-        try {
-            const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url.toString())}`;
-            const response = await fetch(proxyUrl);
-            const text = await response.text();
-
-            if (text.trim().startsWith("<") || text.includes("403 Forbidden") || text.includes("429 Too Many Requests")) {
-                throw new Error("Backend Blocked (HTML Response)");
-            }
-            return JSON.parse(text).data || [];
-        } catch (err) {
-            // Silently fail to backup
-        }
-
-        // 2. Try Fallback Proxy (AllOrigins)
-        try {
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url.toString())}`;
-            const response = await fetch(proxyUrl);
-            
-            if (!response.ok) throw new Error(`Proxy Error: ${response.status}`);
-            
-            const data = await response.json();
-            
-            if (data.contents) {
-                if (data.contents.trim().startsWith("<") || data.status?.http_code > 299) {
-                     return []; // Backend blocked
-                }
-                return JSON.parse(data.contents).data || [];
-            }
-        } catch (err) {
-            // Completely blocked. Return empty to keep site alive.
-            const loading = document.getElementById("loading");
-            if (loading) loading.innerHTML = "⚠️ High Traffic: Server is cooling down. Try again later.";
-            return [];
-        }
-        
-        return [];
+        const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url.toString())}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error("Failed to fetch sounds");
+        const data = await response.json();
+        return data.data || [];
       }
 
       function updateSEOMetadata(title, description, image) {
