@@ -279,39 +279,53 @@
         document.getElementById("nextBtn").disabled = currentPage === maxPage;
       }
 
-      async function fetchSounds(endpoint, params) {
+async function fetchSounds(endpoint, params) {
         let targetUrl = `https://instants-api.vercel.app${endpoint}`;
         const url = new URL(targetUrl);
         Object.entries(params || {}).forEach(([key, value]) => url.searchParams.set(key, value));
         
-        // 1. Try Primary Proxy (CodeTabs)
         try {
+            // 1. Try Primary Proxy (CodeTabs)
             const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url.toString())}`;
             const response = await fetch(proxyUrl);
             
-            // Get text first to ensure it's not empty
+            // CHECK: Is the response actually JSON?
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("text/html")) {
+                console.warn("⚠️ API returned HTML error (likely blocked):", await response.text());
+                throw new Error("API Blocked");
+            }
+
             const text = await response.text();
-            if (!text || text.trim() === "") throw new Error("Empty response from CodeTabs");
+            if (!text || text.trim() === "") throw new Error("Empty response");
             
             const data = JSON.parse(text);
             return data.data || [];
+
         } catch (err) {
             console.warn("Primary proxy failed, trying backup...", err);
         }
 
-        // 2. Fallback Proxy (AllOrigins) - If CodeTabs fails
         try {
+            // 2. Fallback Proxy (AllOrigins)
             const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url.toString())}`;
             const response = await fetch(proxyUrl);
             const data = await response.json();
             
-            // AllOrigins wraps the actual response in a 'contents' string
             if (data.contents) {
+                // AllOrigins returns the string body in 'contents'. 
+                // We check if THAT string is HTML before parsing.
+                if (data.contents.trim().startsWith("<")) {
+                     console.error("❌ Backup proxy also returned HTML error.");
+                     return [];
+                }
                 const innerData = JSON.parse(data.contents);
                 return innerData.data || [];
             }
         } catch (err) {
-            console.error("All proxies failed:", err);
+            console.error("All proxies failed. API is likely down:", err);
+            // Optional: Show an alert or error message on screen to the user
+            document.getElementById("loading").innerHTML = "⚠️ Service is temporarily busy. Please try again later.";
             return [];
         }
         
