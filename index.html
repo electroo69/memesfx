@@ -82,7 +82,6 @@
       .page-btn:hover:not(:disabled) { background: var(--text-main); color: white; }
       .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
       #loading { text-align: center; padding: 2rem; font-weight: 600; color: var(--text-muted); display: none; }
-      .error-message { color: #dc2626; background: #fef2f2; padding: 1rem; border-radius: 12px; margin: 1rem 0; }
       @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
       @media (max-width: 1024px) { .left-sidebar-ad, .right-sidebar-ad { display: none; } }
@@ -220,77 +219,54 @@
         const theme = getRandomTheme(index || 0);
         const card = document.createElement("div");
         card.className = "sound-card";
-        card.style.setProperty('--blob-color', theme.color); 
-        card.style.setProperty('--btn-color', theme.color); 
-        card.style.setProperty('--btn-shadow', theme.shadow);
+        card.style.setProperty('--blob-color', theme.color); card.style.setProperty('--btn-color', theme.color); card.style.setProperty('--btn-shadow', theme.shadow);
 
-        const blob = document.createElement("div"); 
-        blob.className = "card-bg-blob"; 
-        card.appendChild(blob);
+        const blob = document.createElement("div"); blob.className = "card-bg-blob"; card.appendChild(blob);
 
-        const playWrapper = document.createElement("div"); 
-        playWrapper.className = "play-btn-wrapper";
-        const playBtn = document.createElement("button"); 
-        playBtn.className = "play-button";
+        const playWrapper = document.createElement("div"); playWrapper.className = "play-btn-wrapper";
+        const playBtn = document.createElement("button"); playBtn.className = "play-button";
         playBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>`;
         playBtn.onclick = (e) => { e.stopPropagation(); playSound(sound.mp3, playBtn); };
-        playWrapper.appendChild(playBtn); 
-        card.appendChild(playWrapper);
+        playWrapper.appendChild(playBtn); card.appendChild(playWrapper);
 
-        const content = document.createElement("div"); 
-        content.className = "card-content";
-        const titleLink = document.createElement("a"); 
-        titleLink.className = "sound-title";
+        const content = document.createElement("div"); content.className = "card-content";
+        const titleLink = document.createElement("a"); titleLink.className = "sound-title";
         
+        // --- FIX: Remove messy numbers from ID for the URL ---
         const cleanSlug = sound.id.replace(/-\d+$/, '');
+
+        // --- NEW URL STRUCTURE USING CLEAN SLUG ---
         titleLink.href = `/sound/${cleanSlug}`;
+        
         titleLink.textContent = sound.title;
         titleLink.onclick = (e) => {
             e.preventDefault();
+            // --- PUSH STATE WITH CLEAN PATH ---
+            // We use the clean slug for the URL
             window.history.pushState({ soundId: sound.id }, "", `/sound/${cleanSlug}`);
             loadSingleSound(sound);
         };
         content.appendChild(titleLink);
 
-        const downloadBtn = document.createElement("button"); 
-        downloadBtn.className = "download-btn";
+        const downloadBtn = document.createElement("button"); downloadBtn.className = "download-btn";
         downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download MP3`;
         downloadBtn.onclick = async (e) => {
-            e.stopPropagation(); 
-            downloadBtn.innerHTML = "Downloading...";
+            e.stopPropagation(); downloadBtn.innerHTML = "Downloading...";
             try {
-                const response = await fetch(sound.mp3);
-                if (!response.ok) throw new Error('Download failed');
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = sound.title.replace(/[^a-z0-9]/gi, '_') + ".mp3";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-                downloadBtn.innerHTML = "Saved!";
-                setTimeout(() => {
-                    downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download MP3`;
-                }, 2000);
-            } catch (error) {
-                console.error("Download failed:", error);
-                downloadBtn.innerHTML = "Error - Try again";
-                setTimeout(() => {
-                    downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download MP3`;
-                }, 2000);
-            }
+                const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(sound.mp3)}`;
+                const response = await fetch(proxyUrl); const blob = await response.blob(); const url = window.URL.createObjectURL(blob);
+                const link = document.createElement("a"); link.href = url; link.download = sound.title + ".mp3";
+                document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url);
+                downloadBtn.innerHTML = "Saved!"; setTimeout(() => { downloadBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Download MP3`; }, 2000);
+            } catch (error) { console.error("Download failed:", error); downloadBtn.innerText = "Error"; }
         };
-        content.appendChild(downloadBtn); 
-        card.appendChild(content);
+        content.appendChild(downloadBtn); card.appendChild(content);
 
         return card;
       }
 
       function displaySounds(sounds) {
-        const grid = document.getElementById("soundsGrid"); 
-        grid.innerHTML = "";
+        const grid = document.getElementById("soundsGrid"); grid.innerHTML = "";
         sounds.forEach((sound, index) => {
           if (index > 0 && index % 6 === 0) grid.appendChild(createInFeedAd());
           grid.appendChild(createSoundDOM(sound, index));
@@ -304,36 +280,14 @@
       }
 
       async function fetchSounds(endpoint, params) {
-        try {
-          const url = new URL(`https://instants-api.vercel.app${endpoint}`);
-          Object.entries(params || {}).forEach(([key, value]) => url.searchParams.set(key, value));
-          
-          console.log('Fetching from:', url.toString());
-          
-          const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json'
-            }
-          });
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          
-          const text = await response.text();
-          console.log('Response text:', text.substring(0, 200));
-          
-          if (!text || text.trim() === '') {
-            throw new Error('Empty response from server');
-          }
-          
-          const data = JSON.parse(text);
-          return data.data || data || [];
-        } catch (error) {
-          console.error('Fetch error:', error);
-          throw error;
-        }
+        let targetUrl = `https://instants-api.vercel.app${endpoint}`;
+        const url = new URL(targetUrl);
+        Object.entries(params || {}).forEach(([key, value]) => url.searchParams.set(key, value));
+        const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url.toString())}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error("Failed to fetch sounds");
+        const data = await response.json();
+        return data.data || [];
       }
 
       function updateSEOMetadata(title, description, image) {
@@ -343,27 +297,18 @@
         document.querySelector('meta[property="og:title"]').setAttribute("content", title);
         document.querySelector('meta[property="og:description"]').setAttribute("content", description);
         if (image) document.querySelector('meta[property="og:image"]').setAttribute("content", image);
-        if (document.getElementById("pageHeader")) document.getElementById("pageHeader").textContent = title.split(" - ")[0];
+        if(document.getElementById("pageHeader")) document.getElementById("pageHeader").textContent = title.split(" - ")[0];
       }
 
       function injectJSONLD(sound) {
-        const schema = { 
-          "@context": "https://schema.org", 
-          "@type": "AudioObject", 
-          "name": sound.title, 
-          "description": `Play and download ${sound.title}.`, 
-          "contentUrl": sound.mp3, 
-          "encodingFormat": "audio/mpeg", 
-          "uploadDate": new Date().toISOString() 
-        };
+        const schema = { "@context": "https://schema.org", "@type": "AudioObject", "name": sound.title, "description": `Play and download ${sound.title}.`, "contentUrl": sound.mp3, "encodingFormat": "audio/mpeg", "uploadDate": new Date().toISOString() };
         document.getElementById('schema-struct').textContent = JSON.stringify(schema);
       }
 
       async function loadSingleSound(sound) {
          document.getElementById("mainGridView").style.display = "none";
          document.getElementById("singleSoundView").style.display = "flex";
-         const container = document.getElementById("singleSoundContainer"); 
-         container.innerHTML = "";
+         const container = document.getElementById("singleSoundContainer"); container.innerHTML = "";
          container.appendChild(createSoundDOM(sound, 3, true));
          const pageTitle = `${sound.title} Sound Button | Memesfx`;
          const pageDesc = `Play and download ${sound.title} sound effect for free on Memesfx.`;
@@ -379,41 +324,24 @@
         document.getElementById("singleSoundView").style.display = "none";
         document.getElementById("loading").style.display = "block";
         document.getElementById("soundsGrid").style.display = "none";
-        document.getElementById("soundsGrid").innerHTML = "";
 
-        if (pageCache.has(page)) { 
-          finishLoading(pageCache.get(page)); 
-          return; 
-        }
+        if (pageCache.has(page)) { finishLoading(pageCache.get(page)); return; }
 
         try {
           const sounds = await fetchSounds("/api/trending", { q: "id", page, limit: 50 });
-          if (sounds && sounds.length > 0) {
-            pageCache.set(page, sounds); 
-            finishLoading(sounds); 
-            preloadNextPages(page);
-          } else {
-            throw new Error('No sounds returned');
-          }
-        } catch (error) {
-          console.error("Error loading trending:", error);
-          document.getElementById("loading").innerHTML = `<div class="error-message">Error loading sounds. Please try again later.<br><small>${error.message}</small></div>`;
-        }
+          pageCache.set(page, sounds); finishLoading(sounds); preloadNextPages(page);
+        } catch (error) { console.error("Error loading trending:", error); document.getElementById("loading").innerText = "Error loading sounds."; }
       }
 
       function finishLoading(sounds) {
           document.getElementById("loading").style.display = "none";
           document.getElementById("soundsGrid").style.display = "grid";
-          displaySounds(sounds); 
-          updatePagination(); 
-          document.getElementById("pagination").style.display = "flex";
+          displaySounds(sounds); updatePagination(); document.getElementById("pagination").style.display = "flex";
       }
 
       function preloadNextPages(page) {
          if (page < maxPage && !pageCache.has(page + 1)) {
-            fetchSounds("/api/trending", { q: "id", page: page + 1, limit: 50 })
-              .then(s => pageCache.set(page + 1, s))
-              .catch(e => console.log('Preload failed:', e));
+            fetchSounds("/api/trending", { q: "id", page: page + 1, limit: 50 }).then(s => pageCache.set(page + 1, s)).catch(e => console.log(e));
          }
       }
 
@@ -422,45 +350,21 @@
         document.getElementById("singleSoundView").style.display = "none";
         document.getElementById("mainGridView").style.display = "block";
         document.getElementById("soundsGrid").innerHTML = "";
-        document.getElementById("pagination").style.display = "none";
-        
         try {
           const sounds = await fetchSounds("/search", { q: term, limit: 20 });
           document.getElementById("loading").style.display = "none";
-          if (sounds && sounds.length > 0) {
-            displaySounds(sounds);
-          } else {
-            document.getElementById("soundsGrid").innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">No sounds found for "' + term + '"</div>';
-          }
-        } catch (error) {
-          console.error("Error searching:", error);
-          document.getElementById("loading").innerHTML = `<div class="error-message">Search failed. Please try again.</div>`;
-        }
+          displaySounds(sounds); document.getElementById("pagination").style.display = "none";
+        } catch (error) { console.error("Error searching:", error); }
       }
 
       document.getElementById("searchBtn").onclick = () => {
         const term = document.getElementById("searchInput").value.trim();
-        if (term) { 
-          window.history.pushState({ search: term }, "", `?search=${encodeURIComponent(term)}`); 
-          document.getElementById("sectionTitle").textContent = `Results: "${term}"`;
-          performSearch(term); 
-        } else { 
-          window.history.pushState({}, "", "/"); 
-          document.getElementById("sectionTitle").textContent = "Trending Sounds"; 
-          loadTrending(1); 
-        }
+        if (term) { window.history.pushState({ search: term }, "", `?search=${encodeURIComponent(term)}`); document.getElementById("sectionTitle").textContent = `Results: "${term}"`; performSearch(term); }
+        else { window.history.pushState({}, "", "/"); document.getElementById("sectionTitle").textContent = "Trending Sounds"; loadTrending(1); }
       };
       
-      document.getElementById("searchInput").onkeypress = (e) => { 
-        if (e.key === "Enter") document.getElementById("searchBtn").click(); 
-      };
-      
-      document.getElementById("backBtn").onclick = () => { 
-        window.history.pushState({}, "", "/"); 
-        document.getElementById("sectionTitle").textContent = "Trending Sounds"; 
-        loadTrending(currentPage); 
-      };
-      
+      document.getElementById("searchInput").onkeypress = (e) => { if (e.key === "Enter") document.getElementById("searchBtn").click(); };
+      document.getElementById("backBtn").onclick = () => { window.history.pushState({}, "", "/"); document.getElementById("sectionTitle").textContent = "Trending Sounds"; loadTrending(1); };
       document.getElementById("prevBtn").onclick = () => loadTrending(currentPage - 1);
       document.getElementById("nextBtn").onclick = () => loadTrending(currentPage + 1);
 
@@ -470,16 +374,53 @@
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
 
-      window.onload = async () => {
-        const path = window.location.pathname;
+      // --- INITIALIZATION (ROUTING LOGIC) ---
+      window.onload = () => {
+        const path = window.location.pathname; // e.g., /sound/vine-boom
         const searchParam = getUrlParameter("search");
 
+        // Check if we are at /sound/some-id
         if (path.includes('/sound/')) {
-            const soundSlug = path.split('/sound/')[1];
-            if (soundSlug) {
-                document.getElementById("loading").style.display = "block";
-                document.getElementById("mainGridView").style.display = "block";
-                try {
-                    const sounds = await fetchSounds("/search", { q: soundSlug, limit: 5 });
-                    if (sounds && sounds.length > 0) {
-                        const exactMatch = sounds.find(s => {
+            // Extract the clean ID from the URL path
+            const soundId = path.split('/sound/')[1]; // Get 'vine-boom'
+            if (soundId) {
+                // Fetch and load using the clean ID
+                fetchSounds("/search", { q: soundId, limit: 1 }).then(res => {
+                   if(res.length) loadSingleSound(res[0]);
+                   else loadTrending(1);
+               });
+               return; // Stop here to prevent loading trending
+            }
+        }
+
+        // Standard logic for homepage or search query params
+        if (searchParam) {
+           document.getElementById("searchInput").value = searchParam;
+           document.getElementById("sectionTitle").textContent = `Results: "${searchParam}"`;
+           performSearch(searchParam);
+        } else {
+           loadTrending(1);
+        }
+      };
+
+      window.onpopstate = (event) => {
+          const path = window.location.pathname;
+          // If we are at the root path '/', load trending
+          if (path === '/' || path === '/index.html') {
+              document.getElementById("singleSoundView").style.display = "none";
+              document.getElementById("mainGridView").style.display = "block";
+              displaySounds(pageCache.get(currentPage) || []);
+          } 
+          // If we hit back to a search state
+          else if (event.state && event.state.search) {
+             performSearch(event.state.search);
+          }
+          // If we hit back to a sound state (handling could be improved here for full SPA)
+          else if (path.includes('/sound/')) {
+               // Reload location to trigger onload or implement complex state handling
+               window.location.reload();
+          }
+      };
+    </script>
+  </body>
+</html>
