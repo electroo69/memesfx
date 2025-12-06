@@ -232,17 +232,13 @@
         const content = document.createElement("div"); content.className = "card-content";
         const titleLink = document.createElement("a"); titleLink.className = "sound-title";
         
-        // --- FIX: Remove messy numbers from ID for the URL ---
         const cleanSlug = sound.id.replace(/-\d+$/, '');
 
-        // --- NEW URL STRUCTURE USING CLEAN SLUG ---
         titleLink.href = `/sound/${cleanSlug}`;
         
         titleLink.textContent = sound.title;
         titleLink.onclick = (e) => {
             e.preventDefault();
-            // --- PUSH STATE WITH CLEAN PATH ---
-            // We use the clean slug for the URL
             window.history.pushState({ soundId: sound.id }, "", `/sound/${cleanSlug}`);
             loadSingleSound(sound);
         };
@@ -253,6 +249,7 @@
         downloadBtn.onclick = async (e) => {
             e.stopPropagation(); downloadBtn.innerHTML = "Downloading...";
             try {
+                // Keep proxy ONLY for download to avoid CORS issues on file blob
                 const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(sound.mp3)}`;
                 const response = await fetch(proxyUrl); const blob = await response.blob(); const url = window.URL.createObjectURL(blob);
                 const link = document.createElement("a"); link.href = url; link.download = sound.title + ".mp3";
@@ -279,34 +276,33 @@
         document.getElementById("nextBtn").disabled = currentPage === maxPage;
       }
 
-async function fetchSounds(endpoint, params) {
-  // 1. Target your API directly (No more proxyUrl)
-  let targetUrl = `https://instants-api.vercel.app${endpoint}`;
-  
-  // 2. Append parameters correctly
-  const url = new URL(targetUrl);
-  Object.entries(params || {}).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
-  });
+      // --- FIXED FETCH FUNCTION ---
+      async function fetchSounds(endpoint, params) {
+        // 1. Target your API directly
+        let targetUrl = `https://instants-api.vercel.app${endpoint}`;
+        
+        // 2. Append parameters correctly
+        const url = new URL(targetUrl);
+        Object.entries(params || {}).forEach(([key, value]) => {
+            url.searchParams.set(key, value);
+        });
 
-  // 3. Fetch directly
-  try {
-      const response = await fetch(url.toString());
+        // 3. Fetch directly
+        try {
+            const response = await fetch(url.toString());
 
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.data || [];
+
+        } catch (error) {
+            console.error("Error fetching sounds:", error);
+            return [];
+        }
       }
-
-      // 4. Parse JSON directly
-      const data = await response.json();
-      return data.data || [];
-
-  } catch (error) {
-      console.error("Error fetching sounds:", error);
-      // Return empty array to prevent site crash
-      return [];
-  }
-}
 
       function updateSEOMetadata(title, description, image) {
         document.title = title;
@@ -346,7 +342,8 @@ async function fetchSounds(endpoint, params) {
         if (pageCache.has(page)) { finishLoading(pageCache.get(page)); return; }
 
         try {
-          const sounds = await fetchSounds("/api/trending", { q: "id", page, limit: 50 });
+          // --- FIX: REMOVED /api FROM PATH ---
+          const sounds = await fetchSounds("/trending", { q: "id", page, limit: 50 });
           pageCache.set(page, sounds); finishLoading(sounds); preloadNextPages(page);
         } catch (error) { console.error("Error loading trending:", error); document.getElementById("loading").innerText = "Error loading sounds."; }
       }
@@ -359,7 +356,8 @@ async function fetchSounds(endpoint, params) {
 
       function preloadNextPages(page) {
          if (page < maxPage && !pageCache.has(page + 1)) {
-            fetchSounds("/api/trending", { q: "id", page: page + 1, limit: 50 }).then(s => pageCache.set(page + 1, s)).catch(e => console.log(e));
+            // --- FIX: REMOVED /api FROM PATH ---
+            fetchSounds("/trending", { q: "id", page: page + 1, limit: 50 }).then(s => pageCache.set(page + 1, s)).catch(e => console.log(e));
          }
       }
 
@@ -392,26 +390,22 @@ async function fetchSounds(endpoint, params) {
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
 
-      // --- INITIALIZATION (ROUTING LOGIC) ---
+      // --- INITIALIZATION ---
       window.onload = () => {
-        const path = window.location.pathname; // e.g., /sound/vine-boom
+        const path = window.location.pathname; 
         const searchParam = getUrlParameter("search");
 
-        // Check if we are at /sound/some-id
         if (path.includes('/sound/')) {
-            // Extract the clean ID from the URL path
-            const soundId = path.split('/sound/')[1]; // Get 'vine-boom'
+            const soundId = path.split('/sound/')[1]; 
             if (soundId) {
-                // Fetch and load using the clean ID
                 fetchSounds("/search", { q: soundId, limit: 1 }).then(res => {
                    if(res.length) loadSingleSound(res[0]);
                    else loadTrending(1);
                });
-               return; // Stop here to prevent loading trending
+               return; 
             }
         }
 
-        // Standard logic for homepage or search query params
         if (searchParam) {
            document.getElementById("searchInput").value = searchParam;
            document.getElementById("sectionTitle").textContent = `Results: "${searchParam}"`;
@@ -423,19 +417,15 @@ async function fetchSounds(endpoint, params) {
 
       window.onpopstate = (event) => {
           const path = window.location.pathname;
-          // If we are at the root path '/', load trending
           if (path === '/' || path === '/index.html') {
               document.getElementById("singleSoundView").style.display = "none";
               document.getElementById("mainGridView").style.display = "block";
               displaySounds(pageCache.get(currentPage) || []);
           } 
-          // If we hit back to a search state
           else if (event.state && event.state.search) {
              performSearch(event.state.search);
           }
-          // If we hit back to a sound state (handling could be improved here for full SPA)
           else if (path.includes('/sound/')) {
-               // Reload location to trigger onload or implement complex state handling
                window.location.reload();
           }
       };
