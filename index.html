@@ -277,32 +277,38 @@
       }
 
       // --- FIXED FETCH FUNCTION ---
-      async function fetchSounds(endpoint, params) {
-        // 1. Target your API directly
-        let targetUrl = `https://instants-api.vercel.app${endpoint}`;
-        
-        // 2. Append parameters correctly
-        const url = new URL(targetUrl);
-        Object.entries(params || {}).forEach(([key, value]) => {
-            url.searchParams.set(key, value);
-        });
+async function fetchSounds(endpoint, params) {
+  // Direct connection to your Vercel backend
+  // Note: Ensure the endpoint string passed in does not have /api if your file is at root
+  // If your files are in the root folder, use "/trending.php" not "/api/trending"
+  let targetUrl = `https://instants-api.vercel.app${endpoint}`;
+  
+  if (!endpoint.endsWith('.php')) {
+      targetUrl += '.php'; // small helper to ensure .php is added if missing
+  }
 
-        // 3. Fetch directly
-        try {
-            const response = await fetch(url.toString());
+  const url = new URL(targetUrl);
+  Object.entries(params || {}).forEach(([key, value]) => {
+      url.searchParams.set(key, value);
+  });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+  try {
+      const response = await fetch(url.toString());
 
-            const data = await response.json();
-            return data.data || [];
-
-        } catch (error) {
-            console.error("Error fetching sounds:", error);
-            return [];
-        }
+      // If the backend sends an error (like 500 or 404)
+      if (!response.ok) {
+          console.error(`Backend returned status: ${response.status}`);
+          return [];
       }
+
+      const data = await response.json();
+      return data.data || [];
+
+  } catch (error) {
+      console.error("Fetch error:", error);
+      return [];
+  }
+}
 
       function updateSEOMetadata(title, description, image) {
         document.title = title;
