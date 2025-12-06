@@ -560,11 +560,8 @@
       const maxPage = 50;
       const pageCache = new Map();
       const preloadQueue = new Set();
-      const API_BASE_CANDIDATES = [
-        window.__MEMESFX_API_BASE__,
-        `${window.location.origin.replace(/\/$/, "")}/api`,
-        "https://myinstants-api.vercel.app",
-      ].filter(
+      const DEFAULT_API_BASE = "https://memesfx-node-backend.vercel.app/api";
+      const API_BASE_CANDIDATES = [window.__MEMESFX_API_BASE__, DEFAULT_API_BASE].filter(
         (value, index, list) => value && list.indexOf(value) === index
       );
       let resolvedApiBase = null;
