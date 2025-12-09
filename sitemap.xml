@@ -4,6 +4,16 @@
     <loc>https://memesfx.gyatbox.space/</loc>
     <priority>1.0</priority>
   </url>
+    <url>
+    <loc>https://memesfx.gyatbox.space/privacy-policy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://memesfx.gyatbox.space/terms-of-use</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
   <url>
     <loc>https://memesfx.gyatbox.space/sound/vine-boom-sound</loc>
     <changefreq>weekly</changefreq>
